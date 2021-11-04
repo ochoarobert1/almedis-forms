@@ -23,3 +23,13 @@
  */
 
 
+if (! defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+
+/**
+ * Method almedis_activation_hook | almedis_deactivation_hook
+ *
+ * @return void
+ */
+require_once('inc/activation_hook.php');
