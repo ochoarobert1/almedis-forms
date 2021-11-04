@@ -1,0 +1,43 @@
+/* --------------------------------------------------------------
+/* MAIN LESS MIXINS AND FUNCTIONS - LESSHAT
+-------------------------------------------------------------- */
+/* --------------------------------------------------------------
+VARIABLES
+-------------------------------------------------------------- */
+/* --------------------------------------------------------------
+FORM BODY
+-------------------------------------------------------------- */
+main.almedis-main-form-container {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+  -moz-box-align: start;
+  -webkit-align-items: flex-start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  -webkit-box-pack: justify;
+  -moz-box-pack: justify;
+  -ms-flex-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+main.almedis-main-form-container form.almedis-form-container {
+  -webkit-box-flex: 0;
+  -moz-box-flex: 0;
+  -webkit-flex: 0 0 48%;
+  -ms-flex: 0 0 48%;
+  flex: 0 0 48%;
+  max-width: 48%;
+  padding: 1rem;
+}
+main.almedis-main-form-container form.almedis-form-container .form-group label {
+  width: 100%;
+  display: block;
+}
+main.almedis-main-form-container form.almedis-form-container .form-group .form-control {
+  width: 100%;
+}

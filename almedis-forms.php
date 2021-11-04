@@ -52,6 +52,7 @@ class AlmedisForm
         add_filter('admin_footer_text', array($this, 'almedis_remove_admin_footer_text' ), 11);
         add_filter('update_footer', array($this, 'almedis_remove_admin_footer_text' ), 11);
         add_action('admin_enqueue_scripts', array($this, 'almedis_admin_scripts'), 99);
+        add_action('wp_enqueue_scripts', array($this, 'almedis_public_scripts'), 99);
         add_filter('admin_body_class', array($this, 'almedis_admin_body_class' ));
     }
     
@@ -83,6 +84,21 @@ class AlmedisForm
             'all'
         );
     }
+    
+    /**
+     * Method almedis_public_scripts
+     *
+     * @return void
+     */
+    public function almedis_public_scripts() {
+        wp_enqueue_style(
+            'almedis-public',
+            plugins_url('css/public-almedis.css', __FILE__),
+            [],
+            self::VERSION,
+            'all'
+        );
+    }
 
     
     /**
@@ -107,5 +123,6 @@ class AlmedisForm
  */
 require_once('inc/dashboard.php');
 require_once('inc/metaboxes.php');
+require_once('inc/shortcodes.php');
 
 new AlmedisForm;

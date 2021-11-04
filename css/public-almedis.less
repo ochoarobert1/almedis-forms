@@ -1,0 +1,42 @@
+// compress: false, javascriptEnabled: true
+/* --------------------------------------------------------------
+/* MAIN LESS MIXINS AND FUNCTIONS - LESSHAT
+-------------------------------------------------------------- */
+@import 'less/_lesshat.less';
+/* --------------------------------------------------------------
+VARIABLES
+-------------------------------------------------------------- */
+
+@mainfont: 'Open Sans', sans-serif;
+@black: #000000;
+@white: #ffffff;
+@yellow: #FF9B00;
+@lblue: #009DF1;
+@dblue: #004CB4;
+
+/* --------------------------------------------------------------
+FORM BODY
+-------------------------------------------------------------- */
+main.almedis-main-form-container {
+    .display(flex);
+    .align-items(flex-start);
+    .justify-content(space-between);
+    flex-wrap: wrap;
+
+    & form.almedis-form-container {
+        .flex(0 0 48%);
+        max-width: 48%;
+        padding: 1rem;
+
+        & .form-group {
+            & label {
+                width: 100%;
+                display: block;
+            }
+
+            & .form-control {
+                width: 100%;
+            }
+        }
+    }
+}

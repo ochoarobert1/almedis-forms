@@ -25,7 +25,7 @@ class AlmedisMetaboxes extends AlmedisForm
         add_action('load-post.php', array($this, 'almedis_remove_post_type_edit_screen'), 10);
         add_action('admin_head-edit.php', array($this, 'almedis_quick_edit_remover' ));
         add_action('add_meta_boxes', array( $this, 'add_meta_box' ));
-        add_action('save_post', array( $this, 'save'         ));
+        add_action('save_post', array( $this, 'save'));
     }
 
     /**
