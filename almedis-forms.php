@@ -33,3 +33,79 @@ if (! defined('ABSPATH')) {
  * @return void
  */
 require_once('inc/activation_hook.php');
+
+
+/**
+ * AlmedisForm Class Controller
+ */
+class AlmedisForm
+{
+    const VERSION = '1.0.0';
+
+    /**
+     * Method __construct
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        add_filter('admin_footer_text', array($this, 'almedis_remove_admin_footer_text' ), 11);
+        add_filter('update_footer', array($this, 'almedis_remove_admin_footer_text' ), 11);
+        add_action('admin_enqueue_scripts', array($this, 'almedis_admin_scripts'), 99);
+        add_filter('admin_body_class', array($this, 'almedis_admin_body_class' ));
+    }
+    
+    /**
+     * Method almedis_remove_admin_footer_text
+     *
+     * @return false
+     */
+    public function almedis_remove_admin_footer_text()
+    {
+        $screen = get_current_screen();
+        if (strpos($screen->id, 'almedis') !== false) {
+            return null;
+        }
+    }
+    
+    /**
+     * Method almedis_admin_scripts
+     *
+     * @return void
+     */
+    public function almedis_admin_scripts()
+    {
+        wp_enqueue_style(
+            'almedis-admin',
+            plugins_url('css/admin-almedis.css', __FILE__),
+            [],
+            self::VERSION,
+            'all'
+        );
+    }
+
+    
+    /**
+     * Method almedis_admin_body_class
+     *
+     * @param $classes $classes [explicite description]
+     *
+     * @return void
+     */
+    public function almedis_admin_body_class($classes)
+    {
+        $screen = get_current_screen();
+        if (strpos($screen->id, 'almedis') !== false) {
+            $classes .= ' almedis-forms';
+        }
+        return $classes;
+    }
+}
+
+/**
+ * Add dashboard container
+ */
+require_once('inc/dashboard.php');
+require_once('inc/metaboxes.php');
+
+new AlmedisForm;
