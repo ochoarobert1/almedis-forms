@@ -55,6 +55,16 @@ class AlmedisDashboard extends AlmedisForm
 
         add_submenu_page(
             'almedis',
+            __('Instituciones', 'almedis_form'),
+            __('Instituciones', 'almedis_form'),
+            'manage_options',
+            'edit.php?post_type=instituciones',
+            false,
+            null
+        );
+
+        add_submenu_page(
+            'almedis',
             __('Clientes', 'almedis_form'),
             __('Clientes', 'almedis_form'),
             'manage_options',
