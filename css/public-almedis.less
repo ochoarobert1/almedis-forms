@@ -27,6 +27,7 @@ main.almedis-main-form-container {
         .flex(0 0 49%);
         max-width: 49%;
         padding: 1rem;
+        scroll-margin-top: 20px;
 
         &:nth-child(1) {
             padding-left: 0;
@@ -60,6 +61,42 @@ main.almedis-main-form-container {
                 width: 100%;
             }
 
+            & label.form-check-label {
+                vertical-align: middle;
+            }
+
+            & .file-helper {
+                font-size: 0.75rem;
+                line-height: 1rem;
+                color: @black;
+
+                & .almedis-file-icon {
+                    background: url(../img/file.png);
+                    background-size: contain;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    display: inline-block;
+                    height: 30px;
+                    width: 30px;
+                    margin-top: 10px;
+                    margin-right: 10px;
+                    vertical-align: bottom;
+                }
+            }
+
+            & .form-helper {
+                display: block;
+            }
+
+            & .hidden {
+                display: none;
+            }
+
+            & .danger {
+                color: #f00;
+                font-weight: 600;
+            }
+
             & .form-control {
                 background: #f1f1f1;
                 border: 0;
@@ -86,6 +123,10 @@ main.almedis-main-form-container {
                     background-position: center;
                     background-repeat: no-repeat;
                     .transition(all .1s ease-in-out);
+
+                    &:hover {
+                        opacity: 1;
+                    }
                 }
 
                 .form-control {

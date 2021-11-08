@@ -98,6 +98,14 @@ class AlmedisForm
             self::VERSION,
             'all'
         );
+
+        wp_enqueue_script( 
+            'almedis-public', 
+            plugins_url('js/public-almedis.js', __FILE__), 
+            [],
+            self::VERSION, 
+            true 
+        );
     }
 
     
