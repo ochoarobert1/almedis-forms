@@ -119,12 +119,12 @@ class AlmedisShortcodes extends AlmedisForm
             <div class="almedis-radio-wrapper">
                 <div class="form-check form-check-inline">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="radio" name="natural_notification" value="<?php _e('WhatsApp', 'almedis'); ?>"> <?php _e('WhatsApp', 'almedis'); ?>
+                        <input class="form-check-input almedis-form-control" type="radio" name="natural_notification" value="<?php _e('WhatsApp', 'almedis'); ?>"> <?php _e('WhatsApp', 'almedis'); ?>
                     </label>
                 </div>
                 <div class="form-check form-check-inline">
                     <label class="form-check-label">
-                        <input class="form-check-input" type="radio" name="natural_notification" value="<?php _e('Correo Electrónico', 'almedis'); ?>"> <?php _e('Correo Electrónico', 'almedis'); ?>
+                        <input class="form-check-input almedis-form-control" type="radio" name="natural_notification" value="<?php _e('Correo Electrónico', 'almedis'); ?>"> <?php _e('Correo Electrónico', 'almedis'); ?>
                     </label>
                 </div>
             </div>
