@@ -2,7 +2,8 @@ let passd = true,
     passwordShow = document.getElementsByClassName('almedis-show-password'),
     uploadFilesField = document.getElementsByClassName('almedis-file-upload-file'),
     uploadFilesBtn = document.getElementsByClassName('almedis-file-upload-btn'),
-    naturalSubmit = document.getElementById('naturalSubmit');
+    naturalSubmit = document.getElementById('naturalSubmit'),
+    convenioSubmit = document.getElementById('convenioSubmit');
 
 function isValidEmailAddress(emailAddress) {
     'use strict';
@@ -47,71 +48,7 @@ if (uploadFilesBtn.length > 0) {
     }
 }
 
-naturalSubmit.addEventListener('click', function(e) {
-    e.preventDefault();
-    var elem = '';
-    passd = true;
 
-    // Getting Name
-    elem = document.getElementById('natural_nombre');
-    passd = validateInput(elem, 'text');
-
-    // Getting RUT
-    elem = document.getElementById('natural_rut');
-    passd = validateInput(elem, 'text');
-
-    // Getting email
-    elem = document.getElementById('natural_email');
-    passd = validateInput(elem, 'email');
-
-    // Getting phone
-    elem = document.getElementById('natural_phone');
-    passd = validateInput(elem, 'phone');
-
-    // Getting medicine
-    elem = document.getElementById('natural_medicine');
-    passd = validateInput(elem, 'medicine');
-
-    // Getting password
-    elem = document.getElementById('natural_password');
-    passd = validateInput(elem, 'password');
-
-    // Getting password
-    elem = document.getElementsByName('natural_notification');
-    passd = validateInput(elem, 'radio');
-
-    if (passd == true) {
-        var elements = document.getElementsByClassName('almedis-form-control');
-        dataString = 'action=almedis_register_natural';
-        for (let index = 0; index < elements.length; index++) {
-            dataString += '&' + elements[index].getAttribute('name') + '=' + elements[index].value;
-        }
-        console.log(dataString);
-        /* SEND AJAX */
-        /*
-        var newRequest = new XMLHttpRequest();
-        newRequest.open('POST', custom_admin_url.ajax_url, true);
-        newRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-        newRequest.onload = function() {
-            var result = JSON.parse(newRequest.responseText);
-            resultDiv.innerHTML = result.data;
-            if (result.success == true) {
-                setTimeout(function() {
-                    resultDiv.classList.add('d-none');
-                    grecaptcha.reset(grecaptchaWidget);
-                    window.location.href = custom_admin_url.thanks_widget_url;
-                }, 700);
-            }
-        }
-        newRequest.send(dataString);
-        */
-
-    } else {
-        document.getElementById('almedisNaturalForm').scrollIntoView({
-            behavior: 'smooth'
-        });
-    }
-});
 
 
 function validateInput(elem, type) {
@@ -155,6 +92,15 @@ function validateInput(elem, type) {
                 } else {
                     elem.nextElementSibling.classList.add('hidden');
                 }
+            }
+            break;
+
+        case 'select':
+            if (elem.value == '') {
+                elem.nextElementSibling.classList.remove('hidden');
+                passd = false;
+            } else {
+                elem.nextElementSibling.classList.add('hidden');
             }
             break;
 
@@ -210,3 +156,60 @@ function validateInput(elem, type) {
 
     return passd;
 }
+
+convenioSubmit.addEventListener('click', function(e) {
+    e.preventDefault();
+    var elem = '';
+    passd = true;
+
+    // Getting Instituto
+    elem = document.getElementById('convenio_institucion');
+    passd = validateInput(elem, 'select');
+
+    // Getting Name
+    elem = document.getElementById('convenio_nombre');
+    passd = validateInput(elem, 'text');
+
+    // Getting RUT
+    elem = document.getElementById('convenio_rut');
+    passd = validateInput(elem, 'text');
+
+    // Getting email
+    elem = document.getElementById('convenio_email');
+    passd = validateInput(elem, 'email');
+
+    // Getting phone
+    elem = document.getElementById('convenio_phone');
+    passd = validateInput(elem, 'phone');
+
+    // Getting medicine
+    elem = document.getElementById('convenio_medicine');
+    passd = validateInput(elem, 'medicine');
+
+    // Getting password
+    elem = document.getElementById('convenio_password');
+    passd = validateInput(elem, 'password');
+
+    // Getting password
+    elem = document.getElementsByName('convenio_notification');
+    passd = validateInput(elem, 'radio');
+
+    if (passd == true) {
+        var newRequest = new XMLHttpRequest();
+        var resultDiv = document.getElementById('convenioResult');
+        var formData = new FormData(document.getElementById('almedisConveniosForm'));
+
+        formData.append("action", "almedis_register_convenio");
+
+        newRequest.open('POST', custom_admin_url.ajax_url, true);
+        newRequest.onload = function() {
+            var result = JSON.parse(newRequest.responseText);
+            resultDiv.innerHTML = result.data;
+        }
+        newRequest.send(formData);
+    } else {
+        document.getElementById('almedisConveniosForm').scrollIntoView({
+            behavior: 'smooth'
+        });
+    }
+});

@@ -80,43 +80,43 @@ add_action('init', 'almedis_cpt_pedidos', 0);
  *
  * @return void
  */
-function almedis_cpt_instituciones() {
-
-	$labels = array(
-		'name'                  => _x( 'Instituciones', 'Post Type General Name', 'almedis' ),
-		'singular_name'         => _x( 'Institución', 'Post Type Singular Name', 'almedis' ),
-		'menu_name'             => __( 'Instituciones', 'almedis' ),
-		'name_admin_bar'        => __( 'Instituciones', 'almedis' ),
-		'archives'              => __( 'Archivo de Instituciones', 'almedis' ),
-		'attributes'            => __( 'Atributos de Institución', 'almedis' ),
-		'parent_item_colon'     => __( 'Institución Padre:', 'almedis' ),
-		'all_items'             => __( 'Todas las Instituciones', 'almedis' ),
-		'add_new_item'          => __( 'Agregar Nueva Institución', 'almedis' ),
-		'add_new'               => __( 'Agregar Nueva', 'almedis' ),
-		'new_item'              => __( 'Nueva Institución', 'almedis' ),
-		'edit_item'             => __( 'Editar Institución', 'almedis' ),
-		'update_item'           => __( 'Actualizar Institución', 'almedis' ),
-		'view_item'             => __( 'Ver Institución', 'almedis' ),
-		'view_items'            => __( 'Ver Instituciones', 'almedis' ),
-		'search_items'          => __( 'Buscar Institución', 'almedis' ),
-		'not_found'             => __( 'No hay resultados', 'almedis' ),
-		'not_found_in_trash'    => __( 'No hay resultados en Papelera', 'almedis' ),
-		'featured_image'        => __( 'Imagen Destacada', 'almedis' ),
-		'set_featured_image'    => __( 'Colocar Imagen Destacada', 'almedis' ),
-		'remove_featured_image' => __( 'Remover Imagen Destacada', 'almedis' ),
-		'use_featured_image'    => __( 'Usar como Imagen Destacada', 'almedis' ),
-		'insert_into_item'      => __( 'Insertar en Institución', 'almedis' ),
-		'uploaded_to_this_item' => __( 'Cargado a esta Institución', 'almedis' ),
-		'items_list'            => __( 'Listado de Instituciones', 'almedis' ),
-		'items_list_navigation' => __( 'Navegación del Listado de Instituciones', 'almedis' ),
-		'filter_items_list'     => __( 'Filtro del Listado de Instituciones', 'almedis' ),
-	);
-	$args = array(
-		'label'                 => __( 'Institución', 'almedis' ),
-		'description'           => __( 'Instituciones dentro de la Empresa', 'almedis' ),
-		'labels'                => $labels,
-		'supports'              => array( 'title' ),
-		'taxonomies'            => array( 'status' ),
+function almedis_cpt_instituciones()
+{
+    $labels = array(
+        'name'                  => _x('Instituciones', 'Post Type General Name', 'almedis'),
+        'singular_name'         => _x('Institución', 'Post Type Singular Name', 'almedis'),
+        'menu_name'             => __('Instituciones', 'almedis'),
+        'name_admin_bar'        => __('Instituciones', 'almedis'),
+        'archives'              => __('Archivo de Instituciones', 'almedis'),
+        'attributes'            => __('Atributos de Institución', 'almedis'),
+        'parent_item_colon'     => __('Institución Padre:', 'almedis'),
+        'all_items'             => __('Todas las Instituciones', 'almedis'),
+        'add_new_item'          => __('Agregar Nueva Institución', 'almedis'),
+        'add_new'               => __('Agregar Nueva', 'almedis'),
+        'new_item'              => __('Nueva Institución', 'almedis'),
+        'edit_item'             => __('Editar Institución', 'almedis'),
+        'update_item'           => __('Actualizar Institución', 'almedis'),
+        'view_item'             => __('Ver Institución', 'almedis'),
+        'view_items'            => __('Ver Instituciones', 'almedis'),
+        'search_items'          => __('Buscar Institución', 'almedis'),
+        'not_found'             => __('No hay resultados', 'almedis'),
+        'not_found_in_trash'    => __('No hay resultados en Papelera', 'almedis'),
+        'featured_image'        => __('Imagen Destacada', 'almedis'),
+        'set_featured_image'    => __('Colocar Imagen Destacada', 'almedis'),
+        'remove_featured_image' => __('Remover Imagen Destacada', 'almedis'),
+        'use_featured_image'    => __('Usar como Imagen Destacada', 'almedis'),
+        'insert_into_item'      => __('Insertar en Institución', 'almedis'),
+        'uploaded_to_this_item' => __('Cargado a esta Institución', 'almedis'),
+        'items_list'            => __('Listado de Instituciones', 'almedis'),
+        'items_list_navigation' => __('Navegación del Listado de Instituciones', 'almedis'),
+        'filter_items_list'     => __('Filtro del Listado de Instituciones', 'almedis'),
+    );
+    $args = array(
+        'label'                 => __('Institución', 'almedis'),
+        'description'           => __('Instituciones dentro de la Empresa', 'almedis'),
+        'labels'                => $labels,
+        'supports'              => array( 'title' ),
+        'taxonomies'            => array( 'status' ),
         'hierarchical'          => false,
         'public'                => true,
         'show_ui'               => true,
@@ -131,11 +131,50 @@ function almedis_cpt_instituciones() {
         'publicly_queryable'    => true,
         'capability_type'       => 'page',
         'show_in_rest'          => true,
-	);
-	register_post_type( 'instituciones', $args );
-
+    );
+    register_post_type('instituciones', $args);
 }
-add_action( 'init', 'almedis_cpt_instituciones', 0 );
+add_action('init', 'almedis_cpt_instituciones', 0);
+
+/**
+ * Method almedis_historial_db
+ *
+ * @return void
+ */
+
+class almedisActivation
+{
+    public function start_activation()
+    {
+        flush_rewrite_rules();
+        $this->almedis_historial_db();
+    }
+    public function almedis_historial_db()
+    {
+        global $wpdb;
+        $table_name = $wpdb->prefix . "almedis_historial";
+        $almedis_db_version = '1.0.0';
+        $charset_collate = $wpdb->get_charset_collate();
+    
+        if ($wpdb->get_var("SHOW TABLES LIKE '{$table_name}'") != $table_name) {
+            $sql = "CREATE TABLE $table_name (
+                ID mediumint(9) NOT NULL AUTO_INCREMENT,
+                `desc` text NOT NULL,
+                `date` datetime NOT NULL,
+                PRIMARY KEY  (ID)
+            ) $charset_collate;";
+    
+            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+            dbDelta($sql);
+            add_option('almedis_db_version', $almedis_db_version);
+        }
+    
+        var_dump($almedis_db_version);
+    }
+}
+
+
+
  
 /**
  * Method almedis_activate
@@ -143,10 +182,4 @@ add_action( 'init', 'almedis_cpt_instituciones', 0 );
  * @return void
  */
 
-function almedis_activate()
-{
-    almedis_cpt_pedidos();
-    almedis_cpt_instituciones();
-    flush_rewrite_rules();
-}
-register_activation_hook(__FILE__, 'almedis_activate');
+register_activation_hook(__FILE__, array( 'almedisActivation', 'start_activation' ));

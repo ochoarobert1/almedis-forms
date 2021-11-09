@@ -290,3 +290,140 @@ CONTENT
         }
     }
 }
+
+/* --------------------------------------------------------------
+METABOXES
+-------------------------------------------------------------- */
+
+
+.almedis-custom-metabox-wrapper h2 {
+    font-size: 1.3rem !important;
+    font-weight: 600 !important;
+}
+
+.almedis-pedido-metabox {
+    & .postbox-header {
+        background: @lblue;
+
+        & h2 {
+            color: @white;
+        }
+    }
+
+    & .handle-order-higher,
+    & .handle-order-lower {
+        color: @white;
+    }
+
+    & .handlediv.button-link,
+    .toggle-indicator {
+        color: @white;
+    }
+
+    & .inside {
+        padding-bottom: 1.5rem;
+
+        & .almedis-custom-metabox-item {
+            .display(flex);
+            .align-items(center);
+            .justify-content(flex-start);
+            flex-wrap: wrap;
+            margin-top: 1rem;
+
+            & label {
+                .flex(0 0 30%);
+            }
+
+            & input {
+                .flex(0 0 60%);
+            }
+
+            & .almedis-user-icon {
+                background: url(../img/user.png);
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: auto;
+                display: inline-block;
+                height: 28px;
+                vertical-align: middle;
+                width: 28px;
+                
+            }
+        }
+    }
+}
+
+.almedis-cliente-metabox {
+    & .postbox-header {
+        background: @yellow;
+
+        & h2 {
+            color: @white;
+        }
+    }
+
+    & .handle-order-higher,
+    & .handle-order-lower {
+        color: @white;
+    }
+
+    & .handlediv.button-link,
+    .toggle-indicator {
+        color: @white;
+    }
+
+    & .inside {
+        padding-bottom: 1.5rem;
+
+        .almedis-custom-metabox-item {
+            .display(flex);
+            .align-items(flex-start);
+            .justify-content(flex-start);
+            flex-wrap: wrap;
+            flex-flow: column;
+            margin-top: 1rem;
+
+            & label {
+                .flex(0 0 100%);
+            }
+
+            & select {
+                .flex(0 0 100%);
+                width: 100%;
+            }
+        }
+
+    }
+}
+
+.almedis-custom-metabox-documents {
+    .display(flex);
+    .align-items(flex-start);
+    .justify-content(flex-start);
+    flex-wrap: wrap;
+
+    & h3 {
+        .flex(0 0 100%);
+    }
+
+    & .almedis-custom-metabox-document-wrapper {
+        border: 1px solid #cdcdcd;
+        flex: 1;
+        padding: 1rem;
+        max-width: 180px;
+        margin-right: 1rem;
+        text-align: center;
+
+
+        & button {
+            background: url(../img/file.png);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: auto;
+            border: 0;
+            cursor: pointer;
+            height: 40px;
+            width: 40px;
+        }
+    }
+}
