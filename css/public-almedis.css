@@ -83,16 +83,6 @@ main.almedis-main-form-container form.almedis-form-container .form-group .file-h
   margin-right: 10px;
   vertical-align: bottom;
 }
-main.almedis-main-form-container form.almedis-form-container .form-group .form-helper {
-  display: block;
-}
-main.almedis-main-form-container form.almedis-form-container .form-group .hidden {
-  display: none;
-}
-main.almedis-main-form-container form.almedis-form-container .form-group .danger {
-  color: #f00;
-  font-weight: 600;
-}
 main.almedis-main-form-container form.almedis-form-container .form-group .form-control {
   background: #f1f1f1;
   border: 0;
@@ -188,5 +178,77 @@ main.almedis-main-form-container form.almedis-form-container .submit-group .btn-
 }
 main.almedis-main-form-container form.almedis-form-container .submit-group .btn-cotizar:hover {
   background: #FF9B00;
+  color: #ffffff;
+}
+.form-helper {
+  display: block;
+}
+.hidden {
+  display: none;
+}
+.danger {
+  color: #f00;
+  font-weight: 600;
+}
+/* --------------------------------------------------------------
+FORM LOGIN
+-------------------------------------------------------------- */
+.almedis-login-form {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+  -moz-box-align: start;
+  -webkit-align-items: flex-start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.almedis-login-form .almedis-login-form-wrapper {
+  border: 1px solid #ededed;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.almedis-login-form .almedis-login-form-title {
+  background: #009DF1;
+}
+.almedis-login-form .almedis-login-form-title h2 {
+  color: #ffffff;
+  margin-bottom: 0;
+  padding: 1.1rem;
+  font-size: 1.3rem;
+  text-align: center;
+}
+.almedis-login-form .almedis-login-form-content {
+  padding: 1rem 1.2rem;
+}
+.almedis-login-form .almedis-login-form-input-item {
+  padding-bottom: 1rem;
+}
+.almedis-login-form .almedis-login-form-input-item label {
+  display: block;
+}
+.almedis-login-form .almedis-login-form-input-item input {
+  width: 100%;
+}
+.almedis-login-form .almedis-login-form-input-item .btn-login {
+  margin-top: 0.5rem;
+  width: 100%;
+  background: #004CB4;
+  color: #ffffff;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+.almedis-login-form .almedis-login-form-input-item .btn-login:hover {
+  background: #009DF1;
   color: #ffffff;
 }

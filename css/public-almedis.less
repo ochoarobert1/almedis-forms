@@ -84,18 +84,7 @@ main.almedis-main-form-container {
                 }
             }
 
-            & .form-helper {
-                display: block;
-            }
 
-            & .hidden {
-                display: none;
-            }
-
-            & .danger {
-                color: #f00;
-                font-weight: 600;
-            }
 
             & .form-control {
                 background: #f1f1f1;
@@ -193,6 +182,77 @@ main.almedis-main-form-container {
                     background: @yellow;
                     color: @white;
                 }
+            }
+        }
+    }
+}
+
+.form-helper {
+    display: block;
+}
+
+.hidden {
+    display: none;
+}
+
+.danger {
+    color: #f00;
+    font-weight: 600;
+}
+
+/* --------------------------------------------------------------
+FORM LOGIN
+-------------------------------------------------------------- */
+.almedis-login-form {
+    .display(flex);
+    .align-items(flex-start);
+    .justify-content(center);
+    flex-wrap: wrap;
+
+    & .almedis-login-form-wrapper {
+        border: 1px solid #ededed;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    & .almedis-login-form-title {
+        background: @lblue;
+
+        & h2 {
+            color: @white;
+            margin-bottom: 0;
+            padding: 1.1rem;
+            font-size: 1.3rem;
+            text-align: center;
+
+        }
+    }
+
+    & .almedis-login-form-content {
+        padding: 1rem 1.2rem;
+    }
+
+    & .almedis-login-form-input-item {
+        padding-bottom: 1rem;
+
+        & label {
+            display: block;
+        }
+
+        & input {
+            width: 100%;
+        }
+
+        & .btn-login {
+            margin-top: .5rem;
+            width: 100%;
+            background: @dblue;
+            color: @white;
+            .transition(all .3s ease-in-out);
+
+            &:hover {
+                background: @lblue;
+                color: @white;
             }
         }
     }

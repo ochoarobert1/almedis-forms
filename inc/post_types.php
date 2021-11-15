@@ -1,7 +1,7 @@
 <?php
 
 /**
-* Almedis Forms - Actvation Hooks
+* Almedis Forms - Post Types
 *
 *
 * @package    almedis-forms
@@ -136,50 +136,4 @@ function almedis_cpt_instituciones()
 }
 add_action('init', 'almedis_cpt_instituciones', 0);
 
-/**
- * Method almedis_historial_db
- *
- * @return void
- */
 
-class almedisActivation
-{
-    public function start_activation()
-    {
-        flush_rewrite_rules();
-        $this->almedis_historial_db();
-    }
-    public function almedis_historial_db()
-    {
-        global $wpdb;
-        $table_name = $wpdb->prefix . "almedis_historial";
-        $almedis_db_version = '1.0.0';
-        $charset_collate = $wpdb->get_charset_collate();
-    
-        if ($wpdb->get_var("SHOW TABLES LIKE '{$table_name}'") != $table_name) {
-            $sql = "CREATE TABLE $table_name (
-                ID mediumint(9) NOT NULL AUTO_INCREMENT,
-                `desc` text NOT NULL,
-                `date` datetime NOT NULL,
-                PRIMARY KEY  (ID)
-            ) $charset_collate;";
-    
-            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-            dbDelta($sql);
-            add_option('almedis_db_version', $almedis_db_version);
-        }
-    
-        var_dump($almedis_db_version);
-    }
-}
-
-
-
- 
-/**
- * Method almedis_activate
- *
- * @return void
- */
-
-register_activation_hook(__FILE__, array( 'almedisActivation', 'start_activation' ));

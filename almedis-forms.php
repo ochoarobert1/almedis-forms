@@ -32,9 +32,41 @@ if (! defined('ABSPATH')) {
  *
  * @return void
  */
-require_once('inc/activation_hook.php');
+class almedisActivation
+{
+    public function almedis_historial_db()
+    {
+        global $wpdb;
+        $database_version = get_option('almedis_db_version');
+        if ($database_version != '1.0.0') {
+            $table_name = $wpdb->prefix . "almedis_historial";
+            $almedis_db_version = '1.0.0';
+            $charset_collate = $wpdb->get_charset_collate();
+    
+            if ($wpdb->get_var("SHOW TABLES LIKE '{$table_name}'") != $table_name) {
+                $sql = "CREATE TABLE $table_name (
+                ID mediumint(9) NOT NULL AUTO_INCREMENT,
+                `desc` text NOT NULL,
+                `date` timestamp NOT NULL,
+                PRIMARY KEY  (ID)
+            ) $charset_collate;";
+    
+                require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+                dbDelta($sql);
+                add_option('almedis_db_version', $almedis_db_version);
+            }
+        }
+        flush_rewrite_rules();
+    }
+}
 
+/**
+ * Method almedis_activate
+ *
+ * @return void
+ */
 
+register_activation_hook(__FILE__, array( 'almedisActivation', 'almedis_historial_db' ));
 /**
  * AlmedisForm Class Controller
  */
@@ -138,9 +170,13 @@ class AlmedisForm
 /**
  * Add dashboard container
  */
+require_once('inc/post_types.php');
 require_once('inc/dashboard.php');
 require_once('inc/metaboxes.php');
+require_once('inc/historial.php');
 require_once('inc/shortcodes.php');
+require_once('inc/notifications.php');
 require_once('inc/ajax_functions.php');
+
 
 new AlmedisForm;

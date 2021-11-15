@@ -28,6 +28,32 @@ class AlmedisAjax extends AlmedisForm
         // CONVENIOS FORMS
         add_action('wp_ajax_almedis_register_convenio', array($this, 'almedis_register_convenio_callback'));
         add_action('wp_ajax_nopriv_almedis_register_convenio', array($this, 'almedis_register_convenio_callback'));
+        // LOGIN FORMS
+        add_action('wp_ajax_nopriv_almedis_login_user', array($this, 'almedis_login_user_callback'));
+    }
+    
+    /**
+     * Method almedis_login_user_callback
+     *
+     * @return void
+     */
+    public function almedis_login_user_callback()
+    {
+        $posted_data =  isset($_POST) ? $_POST : array();
+
+        $creds = array(
+            'user_login'    => $posted_data['username'],
+            'user_password' => $posted_data['password'],
+            'remember'      => true
+        );
+
+        $user = wp_signon($creds, false);
+ 
+        if (is_wp_error($user)) {
+            wp_send_json_success($user->get_error_message(), 200);
+        } else {
+            wp_send_json_success(__('Login exitoso, en breve serás redirigido', 'almedis'), 200);
+        }
     }
 
     /**
@@ -123,6 +149,7 @@ class AlmedisAjax extends AlmedisForm
      */
     public function create_almedis_client_user($data, $type)
     {
+        $registered = false;
         if ($type == 'natural') {
             if ($this->user_id_exists($data['natural_email'])) {
                 $user = get_user_by('email', $data['natural_email']);
@@ -144,6 +171,7 @@ class AlmedisAjax extends AlmedisForm
             );
               
                 $user_id = wp_insert_user($data);
+                $registered = true;
             }
         } else {
             if ($this->user_id_exists($data['convenio_email'])) {
@@ -166,7 +194,16 @@ class AlmedisAjax extends AlmedisForm
             );
               
                 $user_id = wp_insert_user($data);
+                $registered = true;
             }
+        }
+
+        if ($registered == true) {
+            $user_info = get_userdata($user_id);
+            $text = 'Registro: El usuario del correo ' . $user_info->user_email . ' se ha registrado correctamente';
+
+            $historial = new AlmedisHistorial;
+            $historial->create_almedis_historial($text);
         }
 
         return $user_id;
@@ -278,6 +315,11 @@ class AlmedisAjax extends AlmedisForm
            
         // Insert the post into the database
         $pedidos_id = wp_insert_post($pedidos_post);
+
+        $text = 'Pedido: El ' . wp_strip_all_tags('Pedido #' . $qty_pedidos) . ' ha sido registrado correctamente';
+
+        $historial = new AlmedisHistorial;
+        $historial->create_almedis_historial($text);
 
         return $pedidos_id;
     }

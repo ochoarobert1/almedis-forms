@@ -137,6 +137,12 @@ class AlmedisMetaboxes extends AlmedisForm
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return $post_id;
         }
+
+        if (! isset($_POST['almedis_forms_nonce'])) {
+            return $post_id;
+        }
+
+        $nonce = $_POST['almedis_forms_nonce'];
   
         // Check the user's permissions.
         if ('page' == $_POST['post_type']) {
@@ -148,14 +154,40 @@ class AlmedisMetaboxes extends AlmedisForm
                 return $post_id;
             }
         }
+
+        // Verify that the nonce is valid.
+        if (! wp_verify_nonce($nonce, 'almedis_forms')) {
+            return $post_id;
+        } else {
+            $current_user_id = $_POST['current_user_id'];
+            $user_info = get_userdata($current_user_id);
+            $post = get_post($post_id);
+
+            $text = 'Actualización: El usuario ' . $user_info->user_login . ' ha editado el ' . $post->post_title;
+            $historial = new AlmedisHistorial;
+            $historial->create_almedis_historial($text);
+        }
   
-        /* OK, it's safe for us to save the data now. */
-  
-        // Sanitize the user input.
-        $mydata = sanitize_text_field($_POST['myplugin_new_field']);
-  
-        // Update the meta field.
-        update_post_meta($post_id, '_my_meta_value_key', $mydata);
+        $mydata = sanitize_text_field($_POST['almedis_client_name']);
+        update_post_meta($post_id, 'almedis_client_name', $mydata);
+
+        $mydata = sanitize_text_field($_POST['almedis_client_rut']);
+        update_post_meta($post_id, 'almedis_client_rut', $mydata);
+
+        $mydata = sanitize_text_field($_POST['almedis_client_email']);
+        update_post_meta($post_id, 'almedis_client_email', $mydata);
+
+        $mydata = sanitize_text_field($_POST['almedis_client_phone']);
+        update_post_meta($post_id, 'almedis_client_phone', $mydata);
+
+        $mydata = sanitize_text_field($_POST['almedis_client_medicine']);
+        update_post_meta($post_id, 'almedis_client_medicine', $mydata);
+
+        $mydata = sanitize_text_field($_POST['almedis_client_notification']);
+        update_post_meta($post_id, 'almedis_client_notification', $mydata);
+
+        $mydata = sanitize_text_field($_POST['almedis_client_instituto']);
+        update_post_meta($post_id, 'almedis_client_instituto', $mydata);
     }
   
   
@@ -168,6 +200,10 @@ class AlmedisMetaboxes extends AlmedisForm
     {
         ?>
 <div class="almedis-custom-metabox-wrapper">
+    <?php wp_nonce_field('almedis_forms', 'almedis_forms_nonce'); ?>
+
+    <input type="hidden" name="current_user_id" value="<?php echo get_current_user_id(); ?>">
+
     <h2><?php echo get_the_title(); ?></h2>
 
     <div class="almedis-custom-metabox-item">
