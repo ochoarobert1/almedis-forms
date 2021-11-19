@@ -68,18 +68,18 @@ class AlmedisDashboard extends AlmedisForm
             __('Clientes', 'almedis_form'),
             __('Clientes', 'almedis_form'),
             'manage_options',
-            'edit.php?post_type=pedidos',
-            false,
+            'almedis-clienes',
+            array($this, 'almedis_clientes'),
             null
         );
 
         add_submenu_page(
             'almedis',
-            __('Historial', 'almedis_form'),
+            __('Historial de Cambios', 'almedis_form'),
             __('Historial', 'almedis_form'),
             'manage_options',
-            'edit.php?post_type=pedidos',
-            false,
+            'almedis-historial',
+            array($this, 'almedis_historial'),
             null
         );
 
@@ -88,8 +88,8 @@ class AlmedisDashboard extends AlmedisForm
             __('Opciones', 'almedis_form'),
             __('Opciones', 'almedis_form'),
             'manage_options',
-            'edit.php?post_type=pedidos',
-            false,
+            'almedis-opciones',
+            array($this, 'almedis_opciones'),
             null
         );
     }
@@ -119,6 +119,48 @@ class AlmedisDashboard extends AlmedisForm
         $content_footer = ob_get_clean();
         return $content_footer;
     }
+
+    public function almedis_clientes()
+    {
+        echo self::almedis_get_header();
+
+        echo self::almedis_get_footer();
+    }
+
+    public function almedis_historial()
+    {
+        echo self::almedis_get_header(); ?>
+
+<div class="almedis-content">
+    <div class="almedis-historial-content-wrapper">
+        <?php $historial = AlmedisHistorial::select_almedis_historial(); ?>
+        <?php if (!empty($historial)) : ?>
+        <?php foreach ($historial as $item) { ?>
+        <?php $type = AlmedisHistorial::get_almedis_historial_type($item->desc); ?>
+        <div class="almedis-historial-item historial-type-<?php echo strtolower(sanitize_title($type[0])); ?>">
+            <?php $fecha = DateTime::createFromFormat('Y-m-d H:i:s', $item->date); ?>
+            <span><strong>Dia:</strong> <?php echo $fecha->format('d-m-Y'); ?></span> <span><strong>Hora:</strong> <?php echo $fecha->format('H:i:s'); ?></span>
+
+            <p><strong><?php echo $type[0]; ?>:</strong> <?php echo $type[1]; ?></p>
+        </div>
+        <?php } ?>
+        <?php endif; ?>
+        <div class="almedis-historial-item last-item">
+            <p><span class="smiling-face">☺</span> No hay más items de historial</p>
+        </div>
+    </div>
+</div>
+
+<?php
+        echo self::almedis_get_footer();
+    }
+
+    public function almedis_opciones()
+    {
+        echo self::almedis_get_header();
+
+        echo self::almedis_get_footer();
+    }
     
     /**
      * Method almedis_dashboard
@@ -136,7 +178,13 @@ class AlmedisDashboard extends AlmedisForm
             </div>
             <div class="almedis-dashboard-wrapper">
                 <h4>Pedidos</h4>
-                <p class="big-number">12 <span>+ 10 esta semana</span></p>
+                <?php $pedidos = get_posts(array('numberposts' => -1, 'post_type' => 'pedidos', 'orderby' => 'date', 'order' => 'DESC')); ?>
+                <?php if ($pedidos) : ?>
+                <p class="big-number"><?php echo count($pedidos); ?> <span>+ 10 esta semana</span></p>
+                <?php else : ?>
+                <p class="big-number">0</p>
+                <?php endif; ?>
+                
             </div>
         </div>
         <div id="clients" class="almedis-dashboard-item">
@@ -164,72 +212,29 @@ class AlmedisDashboard extends AlmedisForm
                 <h2><span class="dashicons dashicons-money-alt"></span> <?php _e('Últimos Pedidos', 'almedis'); ?></h2>
             </div>
             <div class="almedis-dashboard-list-content">
+                <?php $pedidos = get_posts(array('numberposts' => -1, 'post_type' => 'pedidos', 'orderby' => 'date', 'order' => 'DESC')); ?>
+                <?php if ($pedidos) { ?>
+                <?php foreach ($pedidos as $pedido) { ?>
                 <div class="almedis-list-item">
                     <div class="almedis-list-item-wrapper">
                         <div class="almedis-list-header">
-                            <h3>Pedido #356</h3>
-                            <p>Cliente: Robert Ochoa</p>
-                            <span>Medicamentos: Amoxicilina</span>
+                            <h3><?php echo $pedido->post_title; ?></h3>
+                            <p>Cliente: <?php echo get_post_meta($pedido->ID, 'almedis_client_name', true); ?></p>
+                            <span>Medicamentos: <?php echo get_post_meta($pedido->ID, 'almedis_client_medicine', true); ?></span>
                         </div>
                         <div class="actions-container">
-                            <button><span class="dashicons dashicons-search"></span></button>
-                            <button><span class="dashicons dashicons-yes"></span></button>
-                            <button><span class="dashicons dashicons-no"></span></button>
-                            <button><span class="dashicons dashicons-trash"></span></button>
+                            <a><span class="dashicons dashicons-search"></span></a>
+                            <a><span class="dashicons dashicons-yes"></span></a>
+                            <a><span class="dashicons dashicons-no"></span></a>
+                            <a><span class="dashicons dashicons-trash"></span></a>
                         </div>
                     </div>
                 </div>
-
-                <div class="almedis-list-item">
-                    <div class="almedis-list-item-wrapper">
-                        <div class="almedis-list-header">
-                            <h3>Pedido #356</h3>
-                            <p>Cliente: Robert Ochoa</p>
-                            <span>Medicamentos: Amoxicilina</span>
-                        </div>
-                        <div class="actions-container">
-                            <button><span class="dashicons dashicons-search"></span></button>
-                            <button><span class="dashicons dashicons-yes"></span></button>
-                            <button><span class="dashicons dashicons-no"></span></button>
-                            <button><span class="dashicons dashicons-trash"></span></button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="almedis-list-item">
-                    <div class="almedis-list-item-wrapper">
-                        <div class="almedis-list-header">
-                            <h3>Pedido #356</h3>
-                            <p>Cliente: Robert Ochoa</p>
-                            <span>Medicamentos: Amoxicilina</span>
-                        </div>
-                        <div class="actions-container">
-                            <button><span class="dashicons dashicons-search"></span></button>
-                            <button><span class="dashicons dashicons-yes"></span></button>
-                            <button><span class="dashicons dashicons-no"></span></button>
-                            <button><span class="dashicons dashicons-trash"></span></button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="almedis-list-item">
-                    <div class="almedis-list-item-wrapper">
-                        <div class="almedis-list-header">
-                            <h3>Pedido #356</h3>
-                            <p>Cliente: Robert Ochoa</p>
-                            <span>Medicamentos: Amoxicilina</span>
-                        </div>
-                        <div class="actions-container">
-                            <button><span class="dashicons dashicons-search"></span></button>
-                            <button><span class="dashicons dashicons-yes"></span></button>
-                            <button><span class="dashicons dashicons-no"></span></button>
-                            <button><span class="dashicons dashicons-trash"></span></button>
-                        </div>
-                    </div>
-                </div>
+                <?php } ?>
+                <?php } ?>
             </div>
             <div class="almedis-all-notifications">
-                <button><?php _e('Ver Todos los Pedidos', 'almedis'); ?></button>
+                <a href="<?php echo admin_url('/edit.php?post_type=pedidos'); ?>" class="btn-dashboard"><?php _e('Ver Todos los Pedidos', 'almedis'); ?></a>
             </div>
         </div>
         <div class="almedis-dashboard-list-container">
@@ -237,80 +242,28 @@ class AlmedisDashboard extends AlmedisForm
                 <h2><span class="dashicons dashicons-warning"></span> <?php _e('Historial de Cambios', 'almedis'); ?></h2>
             </div>
             <div class="almedis-dashboard-list-content notifications-list">
+                <?php $historial = AlmedisHistorial::select_almedis_historial(); ?>
+                <?php if (!empty($historial)) : ?>
+                <?php foreach ($historial as $item) { ?>
+                <?php $type = AlmedisHistorial::get_almedis_historial_type($item->desc); ?>
                 <div class="almedis-list-item">
                     <div class="almedis-list-item-wrapper">
-                        <div class="almedis-list-notification">
-                            Nuevo Ingreso
+                        <div class="almedis-list-notification notification-type-<?php echo strtolower(sanitize_title($type[0])); ?>">
+                            <div class="date-container">
+                                <?php $fecha = DateTime::createFromFormat('Y-m-d H:i:s', $item->date); ?>
+                                <span><strong>Dia:</strong> <?php echo $fecha->format('d-m-Y'); ?></span> <span><strong>Hora:</strong> <?php echo $fecha->format('H:i:s'); ?></span>
+                            </div>
+                            <div class="info-container">
+                                <strong><?php echo $type[0]; ?>:</strong> <span><?php echo $type[1]; ?></span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="almedis-list-item">
-                    <div class="almedis-list-item-wrapper">
-                        <div class="almedis-list-notification">
-                            Nuevo Ingreso
-                        </div>
-                    </div>
-                </div>
-                <div class="almedis-list-item">
-                    <div class="almedis-list-item-wrapper">
-                        <div class="almedis-list-notification">
-                            Nuevo Ingreso
-                        </div>
-                    </div>
-                </div>
-                <div class="almedis-list-item">
-                    <div class="almedis-list-item-wrapper">
-                        <div class="almedis-list-notification">
-                            Nuevo Ingreso
-                        </div>
-                    </div>
-                </div>
-                <div class="almedis-list-item">
-                    <div class="almedis-list-item-wrapper">
-                        <div class="almedis-list-notification">
-                            Nuevo Ingreso
-                        </div>
-                    </div>
-                </div>
-                <div class="almedis-list-item">
-                    <div class="almedis-list-item-wrapper">
-                        <div class="almedis-list-notification">
-                            Nuevo Ingreso
-                        </div>
-                    </div>
-                </div>
-                <div class="almedis-list-item">
-                    <div class="almedis-list-item-wrapper">
-                        <div class="almedis-list-notification">
-                            Nuevo Ingreso
-                        </div>
-                    </div>
-                </div>
-                <div class="almedis-list-item">
-                    <div class="almedis-list-item-wrapper">
-                        <div class="almedis-list-notification">
-                            Nuevo Ingreso
-                        </div>
-                    </div>
-                </div>
-                <div class="almedis-list-item">
-                    <div class="almedis-list-item-wrapper">
-                        <div class="almedis-list-notification">
-                            Nuevo Ingreso
-                        </div>
-                    </div>
-                </div>
-                <div class="almedis-list-item">
-                    <div class="almedis-list-item-wrapper">
-                        <div class="almedis-list-notification">
-                            Nuevo Ingreso
-                        </div>
-                    </div>
-                </div>
-
+                <?php } ?>
+                <?php endif; ?>
             </div>
             <div class="almedis-all-notifications">
-                <button><?php _e('Ver Todo el Historial', 'almedis'); ?></button>
+                <a class="btn-dashboard" href="<?php echo admin_url('/admin.php?page=almedis-historial'); ?>"><?php _e('Ver Todo el Historial', 'almedis'); ?></a>
             </div>
         </div>
     </div>

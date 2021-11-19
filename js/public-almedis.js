@@ -272,35 +272,37 @@ if (naturalSubmit) {
     });
 }
 
-almedisLoginSubmit.addEventListener('click', function(e) {
-    e.preventDefault();
-    var elem = '';
-    passd = true;
+if (almedisLoginSubmit) {
+    almedisLoginSubmit.addEventListener('click', function(e) {
+        e.preventDefault();
+        var elem = '';
+        passd = true;
 
-    // Getting UserName
-    elem = document.getElementById('username');
-    passd = validateInput(elem, 'text');
+        // Getting UserName
+        elem = document.getElementById('username');
+        passd = validateInput(elem, 'text');
 
-    // Getting UserName
-    elem = document.getElementById('password');
-    passd = validateInput(elem, 'password');
+        // Getting UserName
+        elem = document.getElementById('password');
+        passd = validateInput(elem, 'password');
 
-    if (passd == true) {
-        var newRequest = new XMLHttpRequest();
-        var resultDiv = document.getElementById('loginResult');
-        var formData = new FormData(document.getElementById('almedisLoginForm'));
+        if (passd == true) {
+            var newRequest = new XMLHttpRequest();
+            var resultDiv = document.getElementById('loginResult');
+            var formData = new FormData(document.getElementById('almedisLoginForm'));
 
-        formData.append("action", "almedis_login_user");
+            formData.append("action", "almedis_login_user");
 
-        newRequest.open('POST', custom_admin_url.ajax_url, true);
-        newRequest.onload = function() {
-            var result = JSON.parse(newRequest.responseText);
-            resultDiv.innerHTML = result.data;
+            newRequest.open('POST', custom_admin_url.ajax_url, true);
+            newRequest.onload = function() {
+                var result = JSON.parse(newRequest.responseText);
+                resultDiv.innerHTML = result.data;
+            }
+            newRequest.send(formData);
+        } else {
+            document.getElementById('almedisLoginForm').scrollIntoView({
+                behavior: 'smooth'
+            });
         }
-        newRequest.send(formData);
-    } else {
-        document.getElementById('almedisLoginForm').scrollIntoView({
-            behavior: 'smooth'
-        });
-    }
-}, false);
+    }, false);
+}

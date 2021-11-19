@@ -67,8 +67,8 @@ class AlmedisAjax extends AlmedisForm
     {
         global $wpdb;
     
-        $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $wpdb->users WHERE user_email = %d", $email));
-    
+        $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $wpdb->users WHERE user_email = %s", $email));
+
         if ($count == 1) {
             return true;
         } else {
@@ -158,11 +158,11 @@ class AlmedisAjax extends AlmedisForm
                 $nombre = explode(' ', $data['natural_nombre']);
                 $login = explode('@', $data['natural_email']);
 
-                $data = array(
-                'user_login'           => $login[0],
+                $user_data = array(
+                'user_login'           => strtolower($login[0]) . '_' . strtolower($nombre[0]) . '_' . strtolower($nombre[1]),
                 'user_email'           => $data['natural_email'],
                 'user_pass'            => $data['natural_password'],
-                'role'                 => 'almedis-client',
+                'role'                 => 'almedis_client',
                 'first_name'           => $nombre[0],
                 'last_name'            => $nombre[1],
                 'use_ssl'              => false,
@@ -170,7 +170,7 @@ class AlmedisAjax extends AlmedisForm
                 'show_admin_bar_front' => false
             );
               
-                $user_id = wp_insert_user($data);
+                $user_id = wp_insert_user($user_data);
                 $registered = true;
             }
         } else {
@@ -181,11 +181,11 @@ class AlmedisAjax extends AlmedisForm
                 $nombre = explode(' ', $data['convenio_nombre']);
                 $login = explode('@', $data['convenio_email']);
 
-                $data = array(
-                'user_login'           => $login[0],
+                $user_data = array(
+                'user_login'           => strtolower($login[0]) . '_' . strtolower($nombre[0]) . '_' . strtolower($nombre[1]),
                 'user_email'           => $data['convenio_email'],
                 'user_pass'            => $data['convenio_password'],
-                'role'                 => 'almedis-client',
+                'role'                 => 'almedis_client',
                 'first_name'           => $nombre[0],
                 'last_name'            => $nombre[1],
                 'use_ssl'              => false,
@@ -193,12 +193,14 @@ class AlmedisAjax extends AlmedisForm
                 'show_admin_bar_front' => false
             );
               
-                $user_id = wp_insert_user($data);
+                $user_id = wp_insert_user($user_data);
+                
                 $registered = true;
             }
         }
 
         if ($registered == true) {
+            add_user_meta($user_id, 'almedis_client_type', $type);
             $user_info = get_userdata($user_id);
             $text = 'Registro: El usuario del correo ' . $user_info->user_email . ' se ha registrado correctamente';
 

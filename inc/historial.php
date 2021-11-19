@@ -37,4 +37,40 @@ class AlmedisHistorial
             )
         );
     }
+    
+    /**
+     * Method select_almedis_historial
+     *
+     * @return void
+     */
+    public function select_almedis_historial()
+    {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'almedis_historial';
+        $historial = $wpdb->get_results(
+            "
+                SELECT * 
+                FROM $table_name
+                ORDER BY ID DESC
+            "
+        );
+
+        return $historial;
+    }
+    
+    /**
+     * Method get_almedis_historial_type
+     *
+     * @param $text $text String
+     *
+     * @return void
+     */
+    public function get_almedis_historial_type($text)
+    {
+        $text_array = array();
+
+        $text_array = explode(':', $text);
+
+        return $text_array;
+    }
 }

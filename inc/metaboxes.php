@@ -261,7 +261,7 @@ class AlmedisMetaboxes extends AlmedisForm
         <?php $value = get_post_meta($post->ID, 'almedis_client_user', true); ?>
         <div class="current-user">
             <span class="almedis-user-icon"></span> 
-            <?php $blogusers = get_users(array( 'role__in' => array( 'administrator', 'almedis-client' ) )); ?>
+            <?php $blogusers = get_users(array( 'role__in' => array( 'administrator', 'almedis_client' ) )); ?>
             <select name="almedis_client_user" id="almedis_client_user">
             <option value=""><?php _e('Seleccione una opción'); ?></option>
             <?php foreach ($blogusers as $user) { ?>

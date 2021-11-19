@@ -34,6 +34,8 @@ main.almedis-main-form-container form.almedis-form-container {
   max-width: 49%;
   padding: 1rem;
   scroll-margin-top: 20px;
+  padding: 0 !important;
+  background: #ffffff;
 }
 main.almedis-main-form-container form.almedis-form-container:nth-child(1) {
   padding-left: 0;
@@ -49,17 +51,24 @@ main.almedis-main-form-container form.almedis-form-container h2 {
   margin: 0 0 1rem 0;
   padding: 0.5rem;
   text-transform: uppercase;
-  text-align: center;
+  text-align: center !important;
 }
 main.almedis-main-form-container form.almedis-form-container .form-group {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.5rem !important;
+  padding: 0 0.5rem;
+}
+main.almedis-main-form-container form.almedis-form-container .form-group p {
+  font-size: 0.8rem !important;
+}
+main.almedis-main-form-container form.almedis-form-container .form-group p a {
+  font-size: 0.8rem !important;
 }
 main.almedis-main-form-container form.almedis-form-container .form-group label {
   display: block;
   font-size: 0.9rem;
-  font-weight: 400;
-  letter-spacing: -0.4px;
-  padding: 0.5rem;
+  font-weight: 400 !important;
+  letter-spacing: -0.4px !important;
+  padding: 0.5rem !important;
   text-transform: uppercase;
   width: 100%;
 }
@@ -145,9 +154,10 @@ main.almedis-main-form-container form.almedis-form-container .form-group-empty {
 main.almedis-main-form-container form.almedis-form-container .almedis-form-button {
   background: #a9a9a9;
   border-radius: 10px;
+  border: 0 !important;
   color: #fff;
-  font-size: 0.8rem;
-  padding: 0.3rem 1.5rem;
+  font-size: 0.8rem !important;
+  padding: 0.3rem 1.5rem !important;
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
@@ -161,15 +171,18 @@ main.almedis-main-form-container form.almedis-form-container .form-group-button 
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   display: block;
-  margin: 0 0 0 auto;
+  margin: 0 0 0 auto !important;
+  padding: 5px 2rem !important;
 }
 main.almedis-main-form-container form.almedis-form-container .submit-group .btn-cotizar {
   background: #009DF1;
   color: #ffffff;
   font-size: 1.1rem;
-  font-weight: 600;
+  font-weight: 600 !important;
   padding: 0.5rem 0;
+  border: 0 !important;
   text-transform: uppercase;
+  text-align: center !important;
   width: 100%;
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
@@ -210,6 +223,8 @@ FORM LOGIN
   -webkit-justify-content: center;
   justify-content: center;
   flex-wrap: wrap;
+  margin: 2rem 0;
+  color: #000000;
 }
 .almedis-login-form .almedis-login-form-wrapper {
   border: 1px solid #ededed;

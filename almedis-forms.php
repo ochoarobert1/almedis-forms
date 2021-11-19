@@ -56,6 +56,27 @@ class almedisActivation
                 add_option('almedis_db_version', $almedis_db_version);
             }
         }
+
+        if (get_option('almedis_client_roles') < 1) {
+            add_role(
+                'almedis_client',
+                __('Cliente', 'almedis'),
+                array(
+                    'read'  => false,
+                    'delete_posts'  => false,
+                    'delete_published_posts' => false,
+                    'edit_posts'   => false,
+                    'publish_posts' => false,
+                    'upload_files'  => false,
+                    'edit_pages'  => false,
+                    'edit_published_pages'  =>  false,
+                    'publish_pages'  => false,
+                    'delete_published_pages' => false
+                )
+            );
+            update_option('almedis_client_roles', 1);
+        }
+
         flush_rewrite_rules();
     }
 }
