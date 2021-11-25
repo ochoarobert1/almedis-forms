@@ -31,7 +31,7 @@ class AlmedisAjax extends AlmedisForm
         // LOGIN FORMS
         add_action('wp_ajax_nopriv_almedis_login_user', array($this, 'almedis_login_user_callback'));
     }
-    
+
     /**
      * Method almedis_login_user_callback
      *
@@ -96,7 +96,7 @@ class AlmedisAjax extends AlmedisForm
         $user_id = $this->create_almedis_client_user($data, 'natural');
 
         /* REGISTER ALMEDIS DOCUMENTS */
-        $files = $this->register_almedis_documents($data, 'natural');
+        //$files = $this->register_almedis_documents($data, 'natural');
 
         /* REGISTER A NATURAL CLIENT PEDIDO */
         $pedido_id = $this->create_almedis_pedido($data, $files, 'natural', $user_id);
@@ -128,7 +128,7 @@ class AlmedisAjax extends AlmedisForm
         $user_id = $this->create_almedis_client_user($data, 'convenio');
 
         /* REGISTER ALMEDIS DOCUMENTS */
-        $files = $this->register_almedis_documents($data, 'convenio');
+        //$files = $this->register_almedis_documents($data, 'convenio');
 
         /* REGISTER A NATURAL CLIENT PEDIDO */
         $pedido_id = $this->create_almedis_pedido($data, $files, 'convenio', $user_id);
@@ -149,60 +149,30 @@ class AlmedisAjax extends AlmedisForm
      */
     public function create_almedis_client_user($data, $type)
     {
+        $user_id = '';
         $registered = false;
         if ($type == 'natural') {
             if ($this->user_id_exists($data['natural_email'])) {
                 $user = get_user_by('email', $data['natural_email']);
                 $user_id = $user->ID;
-            } else {
-                $nombre = explode(' ', $data['natural_nombre']);
-                $login = explode('@', $data['natural_email']);
-
-                $user_data = array(
-                'user_login'           => strtolower($login[0]) . '_' . strtolower($nombre[0]) . '_' . strtolower($nombre[1]),
-                'user_email'           => $data['natural_email'],
-                'user_pass'            => $data['natural_password'],
-                'role'                 => 'almedis_client',
-                'first_name'           => $nombre[0],
-                'last_name'            => $nombre[1],
-                'use_ssl'              => false,
-                'user_registered'      => date('Y-m-d H:i:s'),
-                'show_admin_bar_front' => false
-            );
-              
-                $user_id = wp_insert_user($user_data);
                 $registered = true;
+            } else {
+                $registered = false;
             }
         } else {
             if ($this->user_id_exists($data['convenio_email'])) {
                 $user = get_user_by('email', $data['convenio_email']);
                 $user_id = $user->ID;
-            } else {
-                $nombre = explode(' ', $data['convenio_nombre']);
-                $login = explode('@', $data['convenio_email']);
-
-                $user_data = array(
-                'user_login'           => strtolower($login[0]) . '_' . strtolower($nombre[0]) . '_' . strtolower($nombre[1]),
-                'user_email'           => $data['convenio_email'],
-                'user_pass'            => $data['convenio_password'],
-                'role'                 => 'almedis_client',
-                'first_name'           => $nombre[0],
-                'last_name'            => $nombre[1],
-                'use_ssl'              => false,
-                'user_registered'      => date('Y-m-d H:i:s'),
-                'show_admin_bar_front' => false
-            );
-              
-                $user_id = wp_insert_user($user_data);
-                
                 $registered = true;
+            } else {
+                $registered = false;
             }
         }
 
         if ($registered == true) {
             add_user_meta($user_id, 'almedis_client_type', $type);
             $user_info = get_userdata($user_id);
-            $text = 'Registro: El usuario del correo ' . $user_info->user_email . ' se ha registrado correctamente';
+            $text = 'Registro: El usuario del correo ' . $user_info->user_email . ' ha realizado un pedido adicional';
 
             $historial = new AlmedisHistorial;
             $historial->create_almedis_historial($text);
@@ -278,6 +248,7 @@ class AlmedisAjax extends AlmedisForm
 
         if ($type == 'natural') {
             $instituto_id = null;
+            $tipo = $data['natural_type'];
             $nombre = $data['natural_nombre'];
             $rut = $data['natural_rut'];
             $email = $data['natural_email'];
@@ -286,6 +257,7 @@ class AlmedisAjax extends AlmedisForm
             $notificacion = $data['natural_notification'];
         } else {
             $instituto_id = $data['convenio_institucion'];
+            $tipo = $data['convenio_type'];
             $nombre = $data['convenio_nombre'];
             $rut = $data['convenio_rut'];
             $email = $data['convenio_email'];
@@ -301,6 +273,8 @@ class AlmedisAjax extends AlmedisForm
             'post_status'   => 'publish',
             'post_author'   => 1,
             'meta_input'    => array(
+                'almedis_unique_id'             => uniqid(),
+                'almedis_client_tipo'           => $tipo,
                 'almedis_client_type'           => $type,
                 'almedis_client_instituto'      => $instituto_id,
                 'almedis_client_name'           => $nombre,
@@ -310,8 +284,8 @@ class AlmedisAjax extends AlmedisForm
                 'almedis_client_medicine'       => $medicine,
                 'almedis_client_notification'   => $notificacion,
                 'almedis_client_user'           => $user_id,
-                'almedis_client_recipe'         => $files['recipe'],
-                'almedis_client_cartapoder'     => $files['cartapoder']
+                'almedis_client_recipe'         => '',
+                'almedis_client_cartapoder'     => ''
             )
         );
            

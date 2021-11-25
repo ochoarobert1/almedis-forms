@@ -137,3 +137,53 @@ function almedis_cpt_instituciones()
 add_action('init', 'almedis_cpt_instituciones', 0);
 
 
+
+function almedis_filter_pedidos_columns($columns)
+{
+    unset($columns['date']);
+    $columns['almedis_unique_id'] = __('Código Único', 'almedis');
+    $columns['almedis_client_name'] = __('Nombre y Apellido', 'almedis');
+    $columns['almedis_client_email'] = __('Correo Electrónico', 'almedis');
+    $columns['almedis_client_type'] = __('Tipo de Cliente', 'almedis');
+    $columns['almedis_pedido_status'] = __('Status', 'almedis');
+    $columns['date'] = __('Date', 'wordpress');
+    return $columns;
+}
+
+add_filter('manage_pedidos_posts_columns', 'almedis_filter_pedidos_columns');
+
+
+function almedis_populate_columns($column, $post_id)
+{
+    // Image column
+    if ('almedis_unique_id' === $column) {
+        ob_start(); ?>
+<code><?php echo get_post_meta($post_id, 'almedis_unique_id', true); ?></code>
+<?php
+        $content = ob_get_clean();
+        echo $content;
+    }
+
+    if ('almedis_client_name' === $column) {
+        echo get_post_meta($post_id, 'almedis_client_name', true);
+    }
+
+    if ('almedis_client_email' === $column) {
+        echo get_post_meta($post_id, 'almedis_client_email', true);
+    }
+
+    if ('almedis_client_type' === $column) {
+        $type = get_post_meta($post_id, 'almedis_client_type', true);
+        $class = ($type == 'natural') ? 'client-type-natural' : 'client-type-convenio';
+        ob_start(); ?>
+<span class="client-type <?php echo $class; ?>"><?php echo $type; ?></span>
+<?php
+        $content = ob_get_clean();
+        echo $content;
+    }
+
+    if ('almedis_pedido_status' === $column) {
+        echo get_post_meta($post_id, 'almedis_pedido_status', true);
+    }
+}
+add_action('manage_pedidos_posts_custom_column', 'almedis_populate_columns', 10, 2);

@@ -514,3 +514,16 @@ METABOXES
   font-size: 1.4rem;
   line-height: 0;
 }
+.client-type {
+  background: #d7d7d7;
+  padding: 3px 10px;
+  text-transform: capitalize;
+}
+.client-type-natural {
+  background: #009DF1;
+  color: #ffffff;
+}
+.client-type-convenio {
+  background: #004CB4;
+  color: #ffffff;
+}

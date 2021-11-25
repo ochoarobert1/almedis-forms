@@ -1,7 +1,7 @@
 <?php
 
 /**
-* Almedis Dashboard - Shortcodes Creator
+* Almedis Dashboard - Submission Form Shortcode
 *
 *
 * @package    almedis-forms
@@ -13,7 +13,7 @@ if (! defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
-class AlmedisShortcodes extends AlmedisForm
+class AlmedisSubmissionForm extends AlmedisForm
 {
     /**
      * Method __construct
@@ -34,50 +34,6 @@ class AlmedisShortcodes extends AlmedisForm
     public function almedis_add_custom_shortcode()
     {
         add_shortcode('almedis-forms', array($this, 'almedis_forms_callback' ));
-        add_shortcode('almedis-myaccount', array($this, 'almedis_myaccount_callback' ));
-    }
-    
-    /**
-     * Method almedis_myaccount_callback
-     *
-     * @param $atts Array
-     * @param $content String
-     *
-     * @return void
-     */
-    public function almedis_myaccount_callback($atts, $content = '')
-    {
-        ob_start(); ?>
-<form id="almedisLoginForm" class="almedis-login-form">
-    <div class="almedis-login-form-wrapper">
-        <div class="almedis-login-form-title">
-            <h2><?php _e('Ingrese en su cuenta', 'almedis'); ?></h2>
-        </div>
-        <div class="almedis-login-form-content">
-            <div class="almedis-login-form-input-item">
-                <label for="username"><?php _e('Nombre de Usuario / Correo Electrónico:', 'almedis'); ?></label>
-                <input id="username" class="almedis-form-control" type="text" name="username" autocomplete="username" />
-                <small class="form-helper danger hidden"><?php _e('Error: El nombre debe ser válido', 'almedis'); ?></small>
-            </div>
-            <div class="almedis-login-form-input-item">
-                <label for="password"><?php _e('Contraseña:', 'almedis'); ?></label>
-                <input id="password" class="almedis-form-control" type="password" name="password" autocomplete="current-password" />
-                <small class="form-helper danger hidden"><?php _e('Error: La contraseña debe ser válida', 'almedis'); ?></small>
-            </div>
-
-            <div class="almedis-login-form-input-item">
-                <button id="almedisLoginSubmit" class="btn btn-md btn-login"><?php _e('Login', 'almedis'); ?></button>
-            </div>
-
-            <div class="almedis-login-form-input-item">
-                <div id="loginResult"></div>
-            </div>
-        </div>
-    </div>
-</form>
-<?php
-        $content = ob_get_clean();
-        return $content;
     }
     
     /**
@@ -90,6 +46,8 @@ class AlmedisShortcodes extends AlmedisForm
      */
     public function almedis_forms_callback($atts, $content = '')
     {
+        wp_enqueue_script('almedis-forms');
+        
         $values = shortcode_atts(array(
             'titulo_natural' => __('Personal Natural', 'almedis'),
             'titulo_convenios' => __('Convenios', 'almedis')
@@ -131,7 +89,7 @@ class AlmedisShortcodes extends AlmedisForm
                         <option value="<?php _e('Representante de un hospital / empresa', 'almedis'); ?>"><?php _e('Representante de un hospital / empresa', 'almedis'); ?></option>
                         <option value="<?php _e('Otros', 'almedis'); ?>"><?php _e('Otros', 'almedis'); ?></option>
                     </select>
-                    <small class="form-helper danger hidden"><?php _e('Error: Debe seleccionar una institución', 'almedis'); ?></small>
+                    <small class="form-helper danger hidden"><?php _e('Error: Debe seleccionar una opción', 'almedis'); ?></small>
                 </div>
                 <div class="form-group">
                     <label for="natural_nombre"><?php _e('Nombres y Apellidos', 'almedis'); ?></label>
@@ -189,8 +147,8 @@ class AlmedisShortcodes extends AlmedisForm
         <aside id="conveniosForm" class="almedis-content-tab almedis-convenios-tab hidden">
             <form enctype="multipart/form-data" id="almedisConveniosForm" class="almedis-form-container almedis-company-form-container">
                 <div class="form-group">
-                    <label for="convenios_type"><?php _e('¿Es usted un...', 'almedis'); ?></label>
-                    <select name="convenios_type" id="convenios_type" class="form-control almedis-form-control">
+                    <label for="convenio_type"><?php _e('¿Es usted un...', 'almedis'); ?></label>
+                    <select name="convenio_type" id="convenio_type" class="form-control almedis-form-control">
                         <option value="" selected disabled><?php _e('Por favor, seleccione una opción', 'almedis'); ?></option>
                         <option value="<?php _e('Paciente', 'almedis'); ?>"><?php _e('Paciente', 'almedis'); ?></option>
                         <option value="<?php _e('Familia o amigo de un paciente', 'almedis'); ?>"><?php _e('Familia o amigo de un paciente', 'almedis'); ?></option>
@@ -199,7 +157,7 @@ class AlmedisShortcodes extends AlmedisForm
                         <option value="<?php _e('Representante de un hospital / empresa', 'almedis'); ?>"><?php _e('Representante de un hospital / empresa', 'almedis'); ?></option>
                         <option value="<?php _e('Otros', 'almedis'); ?>"><?php _e('Otros', 'almedis'); ?></option>
                     </select>
-                    <small class="form-helper danger hidden"><?php _e('Error: Debe seleccionar una institución', 'almedis'); ?></small>
+                    <small class="form-helper danger hidden"><?php _e('Error: Debe seleccionar una opción', 'almedis'); ?></small>
                 </div>
                 <?php if (!empty($arr_instituciones)) : ?>
                 <div class="form-group">
@@ -273,4 +231,4 @@ class AlmedisShortcodes extends AlmedisForm
     }
 }
 
-new AlmedisShortcodes;
+new AlmedisSubmissionForm;

@@ -184,7 +184,7 @@ class AlmedisDashboard extends AlmedisForm
                 <?php else : ?>
                 <p class="big-number">0</p>
                 <?php endif; ?>
-                
+
             </div>
         </div>
         <div id="clients" class="almedis-dashboard-item">

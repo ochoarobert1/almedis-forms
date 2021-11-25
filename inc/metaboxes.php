@@ -207,6 +207,21 @@ class AlmedisMetaboxes extends AlmedisForm
     <h2><?php echo get_the_title(); ?></h2>
 
     <div class="almedis-custom-metabox-item">
+        <label for="almedis_client_tipo">
+            <?php _e('Código Único', 'almedis'); ?>
+        </label>
+        <code><?php echo get_post_meta($post->ID, 'almedis_unique_id', true); ?></code>
+    </div>
+
+    <div class="almedis-custom-metabox-item">
+        <label for="almedis_client_tipo">
+            <?php _e('Tipo de Cliente', 'almedis'); ?>
+        </label>
+        <?php $value = get_post_meta($post->ID, 'almedis_client_tipo', true); ?>
+        <input id="almedis_client_tipo" name="almedis_client_tipo" type="text" class="form-control" value="<?php echo $value; ?>" />
+    </div>
+
+    <div class="almedis-custom-metabox-item">
         <label for="almedis_client_name">
             <?php _e('Nombres y Apellidos', 'almedis'); ?>
         </label>

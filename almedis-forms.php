@@ -161,6 +161,14 @@ class AlmedisForm
             true
         );
 
+        wp_register_script(
+            'almedis-forms',
+            plugins_url('js/public-almedis-forms.js', __FILE__),
+            ['almedis-public'],
+            self::VERSION,
+            true
+        );
+
         wp_localize_script(
             'almedis-public',
             'custom_admin_url',
@@ -195,7 +203,8 @@ require_once('inc/post_types.php');
 require_once('inc/dashboard.php');
 require_once('inc/metaboxes.php');
 require_once('inc/historial.php');
-require_once('inc/shortcodes.php');
+require_once('inc/shortcodes/submission-form.php');
+require_once('inc/shortcodes/account-dashboard.php');
 require_once('inc/notifications.php');
 require_once('inc/ajax_functions.php');
 
