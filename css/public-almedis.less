@@ -1,4 +1,4 @@
-// compress: false, javascriptEnabled: true
+// compress: true, javascriptEnabled: true
 /* --------------------------------------------------------------
 /* MAIN LESS MIXINS AND FUNCTIONS - LESSHAT
 -------------------------------------------------------------- */
@@ -14,6 +14,55 @@ VARIABLES
 @yellow: #FF9B00;
 @lblue: #009DF1;
 @dblue: #004CB4;
+
+/* --------------------------------------------------------------
+DEFAULT
+-------------------------------------------------------------- */
+
+.loader {
+    display: block;
+    margin: 0 auto;
+    height: 80px;
+    width: 80px;
+}
+
+.loader:after {
+    content: " ";
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 6px solid @lblue;
+    border-color: @lblue transparent @lblue transparent;
+    .animation(loader 1.2s linear infinite);
+}
+
+@keyframes loader {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.response-text {
+    margin: 1rem 0 0 0;
+    display: block;
+    text-align: center;
+    font-size: 0.9rem;
+    color: white;
+    background: #62c562;
+    padding: 1rem 0;
+    border-radius: 5px;
+}
+
+.error {
+    background: #eb6161 !important;
+}
+
 
 /* --------------------------------------------------------------
 FORM BODY
@@ -293,24 +342,40 @@ FORM LOGIN
     & .almedis-login-form-wrapper {
         border: 1px solid #ededed;
         border-radius: 10px;
-        overflow: hidden;
-    }
+        padding: 3rem 2rem;
+        .display(flex);
+        .align-items(center);
+        .justify-content(space-between);
+        flex-wrap: wrap;
+        max-width: 600px;
 
-    & .almedis-login-form-title {
-        background: @lblue;
-
-        & h2 {
-            color: @white;
-            margin-bottom: 0;
-            padding: 1.1rem;
-            font-size: 1.3rem;
+        & .almedis-login-title-wrapper {
+            flex: 0 0 100%;
             text-align: center;
+            padding-bottom: 2rem;
 
+            & .logo {
+                max-width: 230px;
+                width: 100%;
+            }
+        }
+
+        & .almedis-login-form-content {
+            flex: 0 0 100%;
         }
     }
 
-    & .almedis-login-form-content {
-        padding: 1rem 1.2rem;
+    & .almedis-login-form-title {
+
+        & h2 {
+            color: @dark;
+            margin-bottom: 0;
+            padding: 1.1rem;
+            font-size: 1.3rem;
+            font-weight: 300;
+            text-align: center;
+
+        }
     }
 
     & .almedis-login-form-input-item {
@@ -318,22 +383,350 @@ FORM LOGIN
 
         & label {
             display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 5px;
         }
 
         & input {
+            background: #f1f1f1;
+            border: 0;
+            border-radius: 25px;
+            border-top-left-radius: 0;
+            box-shadow: none;
+            color: @black;
+            margin: 0;
+            padding: 0.5rem 0.8rem;
             width: 100%;
+            .transition(all .3s ease-in-out);
+
+            &:focus {
+                background: lightgrey;
+            }
         }
 
         & .btn-login {
+            cursor: pointer;
             margin-top: .5rem;
             width: 100%;
-            background: @dblue;
+            background: @yellow;
             color: @white;
+            padding: 0.8rem 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: 0;
+            border-radius: 3px;
             .transition(all .3s ease-in-out);
 
             &:hover {
                 background: @lblue;
                 color: @white;
+            }
+        }
+    }
+}
+
+/* --------------------------------------------------------------
+USER DASHBOARD
+-------------------------------------------------------------- */
+.almedis-user-dashboard {
+    max-width: 1170px;
+    width: 100%;
+    .display(flex);
+    .align-items(flex-start);
+    .justify-content(space-between);
+    flex-wrap: wrap;
+    margin: 2rem auto;
+    border: 1px solid #e1e1e1;
+    border-radius: 15px;
+    padding: 2rem 1.5rem;
+
+    & aside.almedis-user-dashboard-menu {
+        flex: 0 0 25%;
+        padding-right: 2rem;
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            .display(flex);
+            .align-items(flex-start);
+            .justify-content(flex-start);
+            flex-flow: column;
+
+            & li {
+                width: 100%;
+                padding: 0;
+                border-bottom: 1px solid #d5d5d5;
+
+                &:last-child {
+                    border-bottom: 0;
+                }
+
+                & a {
+                    padding: 0.8rem 0.5rem 0.5rem 0.5rem;
+                    display: block;
+                    color: #3a3a3a;
+                    font-weight: 300;
+                    font-size: .9rem;
+
+                    & .dashicons {
+                        margin-top: 2px;
+                        display: inline-block;
+                    }
+                }
+            }
+
+            & li.user-data-list {
+                background: @lblue;
+                color: @white;
+                text-align: center;
+                padding: 1rem 0 !important;
+                border-bottom: 0;
+            }
+        }
+    }
+
+    & .almedis-user-dashboard-menu {
+        flex: 0 0 75%;
+
+        & .almedis-user-dashboard-tab {
+            padding: 1.5rem 1.5rem 0 1.5rem;
+            border-left: 1px solid lightgrey;
+            min-height: 330px;
+            .display(flex);
+            .align-items(flex-start);
+            .justify-content(space-between);
+            flex-wrap: wrap;
+
+            & .almedis-user-dashboard-card {
+                .display(flex);
+                .align-items(center);
+                .justify-content(space-between);
+                flex: 0 0 48%;
+                background: @yellow;
+                color: @white;
+                padding: 1.5rem;
+                border-radius: 20px;
+                margin-bottom: 1.2rem;
+
+                &:nth-child(3) {
+                    background: @lblue
+                }
+
+                & .card-list {
+                    & .dashicons {
+                        font-size: 2.5rem;
+                        display: block;
+                        margin-bottom: 2rem;
+                    }
+
+                    & h3 {
+                        font-size: 1.4rem;
+                        font-weight: 400;
+                        color: white;
+                    }
+                }
+
+                & .almedis-user-dashboard-big-number {
+                    font-size: 4rem;
+                }
+            }
+
+            .almedis-user-dashboard-title {
+                flex: 0 0 100%;
+                .display(flex);
+                .align-items(center);
+                .justify-content(space-between);
+                margin-bottom: 1rem;
+
+                & h2 {
+                    font-size: 1.8rem;
+                    font-weight: 300;
+                }
+
+                & .new-pedido {
+                    background: @yellow;
+                    color: @white;
+                    font-size: 1rem;
+                    padding: .5rem 1rem;
+                    border: 0 !important;
+                    text-align: center !important;
+
+                    .transition(all .3s ease-in-out);
+
+                    &:hover {
+                        background: @lblue;
+                        color: @white;
+                    }
+                }
+            }
+
+            & .almedis-user-dashboard-table {
+                flex: 0 0 100%;
+
+                & table {
+                    width: 100%;
+                    border: 0;
+                    margin: 1rem 0 !important;
+
+                    & thead {
+                        & tr {
+                            & th {
+                                font-weight: 400;
+                                padding: .5rem 1rem;
+                                color: @dark;
+                                border: 0;
+                            }
+                        }
+                    }
+
+                    & tbody {
+                        & tr {
+                            & td {
+                                font-weight: 300;
+                                padding: 1rem;
+                                border: 0;
+                                border-top: 1px dotted #bbbbbb;
+                            }
+
+                            &:nth-child(2n +1) {
+                                & td {
+                                    background: #ebebeb;
+                                }
+                            }
+                        }
+                    }
+
+                    & tfoot {
+                        td {
+                            padding: 1rem !important;
+                            text-align: center;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.btn-pedidos {
+    background: @yellow;
+    color: @white;
+    font-size: 1.1rem;
+    font-weight: 600 !important;
+    display: inline-block;
+    padding: 1rem;
+    max-width: 320px;
+    border: 0 !important;
+    text-transform: uppercase;
+    text-align: center !important;
+    width: 100%;
+
+    .transition(all .3s ease-in-out);
+
+    &:hover {
+        background: @lblue;
+        color: @white;
+    }
+}
+
+.almedis-user-dashboard-data {
+    & .form-group {
+        margin-bottom: 0.5rem !important;
+        padding: 0 0.5rem;
+
+        p {
+            font-size: 0.8rem !important;
+
+            & a {
+                font-size: 0.8rem !important;
+            }
+        }
+
+        & label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600 !important;
+            letter-spacing: -0.4px !important;
+            padding: 0.5rem 0.5rem 0.2rem 0.3rem !important;
+            width: 100%;
+            color: @dark;
+        }
+
+        & label.form-check-label {
+            vertical-align: middle;
+        }
+
+        & .file-helper {
+            font-size: 0.75rem;
+            line-height: 1rem;
+            color: @black;
+
+            & .almedis-file-icon {
+                background: url(../img/file.png);
+                background-size: contain;
+                background-position: center;
+                background-repeat: no-repeat;
+                display: inline-block;
+                height: 30px;
+                width: 30px;
+                margin-top: 10px;
+                margin-right: 10px;
+                vertical-align: bottom;
+            }
+        }
+
+
+
+        & .form-control {
+            background: #f1f1f1;
+            border: 0;
+            border-radius: 25px;
+            border-top-left-radius: 0;
+            box-shadow: none;
+            color: @black;
+            margin: 0;
+            padding: 0.5rem 0.8rem;
+            width: 100%;
+            .transition(all .3s ease-in-out);
+
+            &:focus {
+                background: lightgrey;
+            }
+        }
+
+        & .password-wrapper {
+            position: relative;
+
+            & .almedis-show-password {
+                background: url(../img/icon-pass.png);
+                cursor: pointer;
+                height: 100%;
+                top: 0;
+                opacity: 0;
+                position: absolute;
+                right: 0;
+                width: 50px;
+                background-position: center;
+                background-repeat: no-repeat;
+                .transition(all .1s ease-in-out);
+
+                &:hover {
+                    opacity: 1;
+                }
+            }
+
+            .form-control {
+                &:focus~.almedis-show-password {
+                    opacity: 1;
+                }
+
+                &:hover~.almedis-show-password {
+                    opacity: 1;
+                }
+
+
             }
         }
     }

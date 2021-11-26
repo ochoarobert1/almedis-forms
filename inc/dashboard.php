@@ -119,47 +119,63 @@ class AlmedisDashboard extends AlmedisForm
         $content_footer = ob_get_clean();
         return $content_footer;
     }
-
+    
+    /**
+     * Method almedis_clientes
+     *
+     * @return void
+     */
     public function almedis_clientes()
     {
-        echo self::almedis_get_header();
+        echo $this->almedis_get_header();
 
-        echo self::almedis_get_footer();
+        echo $this->almedis_get_footer();
     }
-
+    
+    /**
+     * Method almedis_historial
+     *
+     * @return void
+     */
     public function almedis_historial()
     {
-        echo self::almedis_get_header(); ?>
+        echo $this->almedis_get_header(); ?>
 
 <div class="almedis-content">
     <div class="almedis-historial-content-wrapper">
-        <?php $historial = AlmedisHistorial::select_almedis_historial(); ?>
+        <?php $historicalClass = new AlmedisHistorial(); ?>
+        <?php $historial = $historicalClass->select_almedis_historial(); ?>
         <?php if (!empty($historial)) : ?>
         <?php foreach ($historial as $item) { ?>
-        <?php $type = AlmedisHistorial::get_almedis_historial_type($item->desc); ?>
+        <?php $type = $historicalClass->get_almedis_historial_type($item->desc); ?>
         <div class="almedis-historial-item historial-type-<?php echo strtolower(sanitize_title($type[0])); ?>">
             <?php $fecha = DateTime::createFromFormat('Y-m-d H:i:s', $item->date); ?>
-            <span><strong>Dia:</strong> <?php echo $fecha->format('d-m-Y'); ?></span> <span><strong>Hora:</strong> <?php echo $fecha->format('H:i:s'); ?></span>
+            <span><strong><?php _e('Dia:', 'almedis'); ?></strong> <?php echo $fecha->format('d-m-Y'); ?></span> <span><strong><?php _e('Hora:', 'almedis'); ?></strong> <?php echo $fecha->format('H:i:s'); ?></span>
 
             <p><strong><?php echo $type[0]; ?>:</strong> <?php echo $type[1]; ?></p>
         </div>
         <?php } ?>
         <?php endif; ?>
         <div class="almedis-historial-item last-item">
-            <p><span class="smiling-face">☺</span> No hay más items de historial</p>
+            <p><span class="smiling-face">&#128512;</span> <?php _e('No hay más items de historial', 'almedis'); ?></p>
         </div>
     </div>
 </div>
 
 <?php
-        echo self::almedis_get_footer();
+        echo $this->almedis_get_footer();
     }
-
+    
+    /**
+     * Method almedis_opciones
+     *
+     * @return void
+     */
     public function almedis_opciones()
     {
-        echo self::almedis_get_header();
+        echo $this->almedis_get_header();
 
-        echo self::almedis_get_footer();
+        echo $this->almedis_get_footer();
     }
     
     /**
@@ -169,7 +185,7 @@ class AlmedisDashboard extends AlmedisForm
      */
     public function almedis_dashboard()
     {
-        echo self::almedis_get_header(); ?>
+        echo $this->almedis_get_header(); ?>
 <div class="almedis-content">
     <div class="almedis-dashboard-info main-dashboard">
         <div id="pedidos" class="almedis-dashboard-item">
@@ -177,7 +193,7 @@ class AlmedisDashboard extends AlmedisForm
                 <span class="dashicons dashicons-money-alt"></span>
             </div>
             <div class="almedis-dashboard-wrapper">
-                <h4>Pedidos</h4>
+                <h4><?php _e('Pedidos', 'almedis'); ?></h4>
                 <?php $pedidos = get_posts(array('numberposts' => -1, 'post_type' => 'pedidos', 'orderby' => 'date', 'order' => 'DESC')); ?>
                 <?php if ($pedidos) : ?>
                 <p class="big-number"><?php echo count($pedidos); ?> <span>+ 10 esta semana</span></p>
@@ -192,7 +208,7 @@ class AlmedisDashboard extends AlmedisForm
                 <span class="dashicons dashicons-admin-users"></span>
             </div>
             <div class="almedis-dashboard-wrapper">
-                <h4>Clientes</h4>
+                <h4><?php _e('Clientes', 'almedis'); ?></h4>
                 <p class="big-number">12 <span>+ 5 esta semana</span></p>
             </div>
         </div>
@@ -201,7 +217,7 @@ class AlmedisDashboard extends AlmedisForm
                 <span class="dashicons dashicons-admin-users"></span>
             </div>
             <div class="almedis-dashboard-wrapper">
-                <h4>Ordenes de Compra</h4>
+                <h4><?php _e('Ordenes de Compra', 'almedis'); ?></h4>
                 <p class="big-number">$ 1,200.00 <span>+ $ 100 esta semana</span></p>
             </div>
         </div>
@@ -219,8 +235,8 @@ class AlmedisDashboard extends AlmedisForm
                     <div class="almedis-list-item-wrapper">
                         <div class="almedis-list-header">
                             <h3><?php echo $pedido->post_title; ?></h3>
-                            <p>Cliente: <?php echo get_post_meta($pedido->ID, 'almedis_client_name', true); ?></p>
-                            <span>Medicamentos: <?php echo get_post_meta($pedido->ID, 'almedis_client_medicine', true); ?></span>
+                            <p><?php _e('Cliente:', 'almedis'); ?> <?php echo get_post_meta($pedido->ID, 'almedis_client_name', true); ?></p>
+                            <span><?php _e('Medicamentos:', 'almedis'); ?> <?php echo get_post_meta($pedido->ID, 'almedis_client_medicine', true); ?></span>
                         </div>
                         <div class="actions-container">
                             <a><span class="dashicons dashicons-search"></span></a>
@@ -242,16 +258,17 @@ class AlmedisDashboard extends AlmedisForm
                 <h2><span class="dashicons dashicons-warning"></span> <?php _e('Historial de Cambios', 'almedis'); ?></h2>
             </div>
             <div class="almedis-dashboard-list-content notifications-list">
-                <?php $historial = AlmedisHistorial::select_almedis_historial(); ?>
+                <?php $historial_class = new AlmedisHistorial(); ?>
+                <?php $historial = $historial_class->select_almedis_historial(); ?>
                 <?php if (!empty($historial)) : ?>
                 <?php foreach ($historial as $item) { ?>
-                <?php $type = AlmedisHistorial::get_almedis_historial_type($item->desc); ?>
+                <?php $type = $historial_class->get_almedis_historial_type($item->desc); ?>
                 <div class="almedis-list-item">
                     <div class="almedis-list-item-wrapper">
                         <div class="almedis-list-notification notification-type-<?php echo strtolower(sanitize_title($type[0])); ?>">
                             <div class="date-container">
                                 <?php $fecha = DateTime::createFromFormat('Y-m-d H:i:s', $item->date); ?>
-                                <span><strong>Dia:</strong> <?php echo $fecha->format('d-m-Y'); ?></span> <span><strong>Hora:</strong> <?php echo $fecha->format('H:i:s'); ?></span>
+                                <span><strong><?php _e('Dia:', 'almedis'); ?></strong> <?php echo $fecha->format('d-m-Y'); ?></span> <span><strong><?php _e('Hora:', 'almedis'); ?></strong> <?php echo $fecha->format('H:i:s'); ?></span>
                             </div>
                             <div class="info-container">
                                 <strong><?php echo $type[0]; ?>:</strong> <span><?php echo $type[1]; ?></span>
@@ -269,7 +286,7 @@ class AlmedisDashboard extends AlmedisForm
     </div>
 </div>
 <?php
-        echo self::almedis_get_footer();
+        echo $this->almedis_get_footer();
     }
 }
 

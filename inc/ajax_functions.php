@@ -30,6 +30,7 @@ class AlmedisAjax extends AlmedisForm
         add_action('wp_ajax_nopriv_almedis_register_convenio', array($this, 'almedis_register_convenio_callback'));
         // LOGIN FORMS
         add_action('wp_ajax_nopriv_almedis_login_user', array($this, 'almedis_login_user_callback'));
+        add_action('wp_ajax_almedis_login_user', array($this, 'almedis_login_user_callback'));
     }
 
     /**
@@ -39,6 +40,7 @@ class AlmedisAjax extends AlmedisForm
      */
     public function almedis_login_user_callback()
     {
+        $response = array();
         $posted_data =  isset($_POST) ? $_POST : array();
 
         $creds = array(
@@ -50,10 +52,20 @@ class AlmedisAjax extends AlmedisForm
         $user = wp_signon($creds, false);
  
         if (is_wp_error($user)) {
-            wp_send_json_success($user->get_error_message(), 200);
+            $response =array(
+                'message' => __('Hay un problema con sus credenciales, por favor revise sus datos y reintente', 'almedis'),
+                'class' => 'error'
+            );
         } else {
-            wp_send_json_success(__('Login exitoso, en breve serás redirigido', 'almedis'), 200);
+            $response =array(
+                'message' => __('Login exitoso, en breve serás redirigido a tu cuenta', 'almedis'),
+                'class' => 'success'
+            );
         }
+
+        wp_send_json_success($response, 200);
+
+        wp_die();
     }
 
     /**

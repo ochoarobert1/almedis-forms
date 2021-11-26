@@ -34,6 +34,11 @@ if (! defined('ABSPATH')) {
  */
 class almedisActivation
 {
+    /**
+     * Method almedis_historial_db
+     *
+     * @return void
+     */
     public function almedis_historial_db()
     {
         global $wpdb;
@@ -155,7 +160,7 @@ class AlmedisForm
 
         wp_enqueue_script(
             'almedis-public',
-            plugins_url('js/public-almedis.js', __FILE__),
+            plugins_url('js/public-almedis.min.js', __FILE__),
             [],
             self::VERSION,
             true
@@ -163,7 +168,15 @@ class AlmedisForm
 
         wp_register_script(
             'almedis-forms',
-            plugins_url('js/public-almedis-forms.js', __FILE__),
+            plugins_url('js/public-almedis-forms.min.js', __FILE__),
+            ['almedis-public'],
+            self::VERSION,
+            true
+        );
+
+        wp_register_script(
+            'almedis-login',
+            plugins_url('js/public-almedis-login.js', __FILE__),
             ['almedis-public'],
             self::VERSION,
             true

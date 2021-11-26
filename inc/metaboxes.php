@@ -218,7 +218,15 @@ class AlmedisMetaboxes extends AlmedisForm
             <?php _e('Tipo de Cliente', 'almedis'); ?>
         </label>
         <?php $value = get_post_meta($post->ID, 'almedis_client_tipo', true); ?>
-        <input id="almedis_client_tipo" name="almedis_client_tipo" type="text" class="form-control" value="<?php echo $value; ?>" />
+        <select name="almedis_client_tipo" id="almedis_client_tipo" class="form-control">
+            <option value="Paciente" <?php selected($value, 'Paciente'); ?>>Paciente</option>
+            <option value="Familia o amigo de un paciente" <?php selected($value, 'Familia o amigo de un paciente'); ?>>Familia o amigo de un paciente</option>
+            <option value="Doctor" <?php selected($value, 'Doctor'); ?>>Doctor</option>
+            <option value="Fundación o Corporación" <?php selected($value, 'Fundación o Corporación'); ?>>Fundación o Corporación</option>
+            <option value="Paciente" <?php selected($value, 'Paciente'); ?>>Paciente</option>
+            <option value="Representante de un hospital / empresa" <?php selected($value, 'Representante de un hospital / empresa'); ?>>Representante de un hospital / empresa</option>
+            <option value="Otros" <?php selected($value, 'Otros'); ?>>Otros</option>
+        </select>
     </div>
 
     <div class="almedis-custom-metabox-item">

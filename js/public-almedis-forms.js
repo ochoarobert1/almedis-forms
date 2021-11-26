@@ -4,6 +4,7 @@ let passwordShow = document.getElementsByClassName('almedis-show-password'),
     naturalSubmit = document.getElementById('naturalSubmit'),
     convenioSubmit = document.getElementById('convenioSubmit');
 
+// Add password button to show
 if (passwordShow.length > 0) {
     for (var i = 0; i < passwordShow.length; i++) {
         passwordShow[i].addEventListener('click', function(e) {
@@ -17,6 +18,7 @@ if (passwordShow.length > 0) {
     }
 }
 
+// Form tabs function
 if (tabsBtns.length > 0) {
     for (var i = 0; i < tabsBtns.length; i++) {
         tabsBtns[i].addEventListener('click', function(e) {
@@ -34,6 +36,7 @@ if (tabsBtns.length > 0) {
     }
 }
 
+// Submit of Natural Form
 if (naturalSubmit) {
     naturalSubmit.addEventListener('click', function(e) {
         e.preventDefault();
@@ -71,6 +74,7 @@ if (naturalSubmit) {
         if (passd == true) {
             var newRequest = new XMLHttpRequest();
             var resultDiv = document.getElementById('naturalResult');
+            resultDiv.innerHTML = '<div class="loader"></div>';
             var formData = new FormData(document.getElementById('almedisNaturalForm'));
 
             formData.append("action", "almedis_register_natural");
@@ -78,7 +82,7 @@ if (naturalSubmit) {
             newRequest.open('POST', custom_admin_url.ajax_url, true);
             newRequest.onload = function() {
                 var result = JSON.parse(newRequest.responseText);
-                resultDiv.innerHTML = result.data;
+                resultDiv.innerHTML = '<span class="response-text">' +  result.data + '</span>';
             }
             newRequest.send(formData);
         } else {
@@ -89,6 +93,7 @@ if (naturalSubmit) {
     });
 }
 
+// Submit of Convenios Form
 if (convenioSubmit) {
     convenioSubmit.addEventListener('click', function(e) {
         e.preventDefault();
@@ -130,6 +135,7 @@ if (convenioSubmit) {
         if (passd == true) {
             var newRequest = new XMLHttpRequest();
             var resultDiv = document.getElementById('convenioResult');
+            resultDiv.innerHTML = '<div class="loader"></div>';
             var formData = new FormData(document.getElementById('almedisConveniosForm'));
 
             formData.append("action", "almedis_register_convenio");
@@ -137,7 +143,7 @@ if (convenioSubmit) {
             newRequest.open('POST', custom_admin_url.ajax_url, true);
             newRequest.onload = function() {
                 var result = JSON.parse(newRequest.responseText);
-                resultDiv.innerHTML = result.data;
+                resultDiv.innerHTML = '<span class="response-text">' +  result.data + '</span>';
             }
             newRequest.send(formData);
         } else {
@@ -147,4 +153,3 @@ if (convenioSubmit) {
         }
     });
 }
-
