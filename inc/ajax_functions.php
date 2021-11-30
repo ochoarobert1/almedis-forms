@@ -296,6 +296,7 @@ class AlmedisAjax extends AlmedisForm
                 'almedis_client_medicine'       => $medicine,
                 'almedis_client_notification'   => $notificacion,
                 'almedis_client_user'           => $user_id,
+                'almedis_pedido_status'           => 'Cotizacion Recibida',
                 'almedis_client_recipe'         => '',
                 'almedis_client_cartapoder'     => ''
             )

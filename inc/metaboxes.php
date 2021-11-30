@@ -28,6 +28,8 @@ class AlmedisMetaboxes extends AlmedisForm
         add_action('save_post', array( $this, 'save'));
         add_filter('postbox_classes_pedidos_almedis_metabox', array($this, 'add_pedido_metabox_classes'));
         add_filter('postbox_classes_pedidos_almedis_type_metabox', array($this, 'add_cliente_metabox_classes'));
+        add_filter('postbox_classes_pedidos_almedis_status_metabox', array($this, 'add_pedido_metabox_classes'));
+        add_filter('postbox_classes_pedidos_almedis_admin_metabox', array($this, 'add_pedido_metabox_classes'));
     }
     
     /**
@@ -120,6 +122,24 @@ class AlmedisMetaboxes extends AlmedisForm
                 'side',
                 'high'
             );
+
+            add_meta_box(
+                'almedis_status_metabox',
+                __('Estatus del Pedido', 'almedis'),
+                array( $this, 'render_status_meta_box_content' ),
+                $post_type,
+                'side',
+                'high'
+            );
+
+            add_meta_box(
+                'almedis_admin_metabox',
+                __('Administrador: Información Adicional', 'almedis'),
+                array( $this, 'render_admin_meta_box_content' ),
+                $post_type,
+                'advanced',
+                'high'
+            );
         }
     }
   
@@ -167,6 +187,11 @@ class AlmedisMetaboxes extends AlmedisForm
             $historial = new AlmedisHistorial;
             $historial->create_almedis_historial($text);
         }
+
+        
+
+        $mydata = sanitize_text_field($_POST['almedis_pedido_status']);
+        update_post_meta($post_id, 'almedis_pedido_status', $mydata);
   
         $mydata = sanitize_text_field($_POST['almedis_client_name']);
         update_post_meta($post_id, 'almedis_client_name', $mydata);
@@ -283,13 +308,13 @@ class AlmedisMetaboxes extends AlmedisForm
         </label>
         <?php $value = get_post_meta($post->ID, 'almedis_client_user', true); ?>
         <div class="current-user">
-            <span class="almedis-user-icon"></span> 
+            <span class="almedis-user-icon"></span>
             <?php $blogusers = get_users(array( 'role__in' => array( 'administrator', 'almedis_client' ) )); ?>
             <select name="almedis_client_user" id="almedis_client_user">
-            <option value=""><?php _e('Seleccione una opción'); ?></option>
-            <?php foreach ($blogusers as $user) { ?>
-            <option value="<?php echo esc_attr($user->ID); ?>" <?php selected($value, $user->ID); ?>><?php echo esc_html($user->display_name) . ' - ' . esc_html($user->user_email); ?></option>
-            <?php } ?>
+                <option value=""><?php _e('Seleccione una opción'); ?></option>
+                <?php foreach ($blogusers as $user) { ?>
+                <option value="<?php echo esc_attr($user->ID); ?>" <?php selected($value, $user->ID); ?>><?php echo esc_html($user->display_name) . ' - ' . esc_html($user->user_email); ?></option>
+                <?php } ?>
             </select>
         </div>
     </div>
@@ -357,6 +382,53 @@ class AlmedisMetaboxes extends AlmedisForm
     </div>
 </div>
 <?php
+    }
+
+    public function render_status_meta_box_content($post) {
+?>
+<div class="almedis-custom-metabox-item">
+    <label for="almedis_pedido_status">
+        <?php _e('Estatus:', 'almedis'); ?>
+    </label>
+    <?php $value = get_post_meta($post->ID, 'almedis_pedido_status', true); ?>
+    <select name="almedis_pedido_status" id="almedis_pedido_status" class="form-control">
+        <option value="Cotizacion Recibida" <?php selected($value, 'Cotizacion Recibida'); ?>>Cotizacion Recibida</option>
+        <option value="Confirmación de Pedido" <?php selected($value, 'Confirmación de Pedido'); ?>>Confirmación de Pedido</option>
+        <option value="Pendiente de Pago" <?php selected($value, 'Pendiente de Pago'); ?>>Pendiente de Pago</option>
+        <option value="Pago Confirmado" <?php selected($value, 'Pago Confirmado'); ?>>Pago Confirmado</option>
+        <option value="Generación de Número de Pedido" <?php selected($value, 'Generación de Número de Pedido'); ?>>Generación de Número de Pedido</option>
+        <option value="En Tránsito" <?php selected($value, 'En Tránsito'); ?>>En Tránsito</option>
+        <option value="Completada" <?php selected($value, 'Completada'); ?>>Completada</option>
+        <option value="Cancelada" <?php selected($value, 'Cancelada'); ?>>Cancelada</option>
+    </select>
+</div>
+<?php
+    }
+
+    public function render_admin_meta_box_content($post) {
+        ?>
+<div class="almedis-custom-metabox-item">
+    <label for="almedis_pedido_payment_nro">
+        <?php _e('Nro. de Confirmación de Pago - Transbank:', 'almedis'); ?>
+    </label>
+    <?php $value = get_post_meta($post->ID, 'almedis_pedido_payment_nro', true); ?>
+    <input id="almedis_pedido_payment_nro" name="almedis_pedido_payment_nro" type="text" class="form-control" value="<?php echo $value; ?>" />
+</div>
+<div class="almedis-custom-metabox-item">
+    <label for="almedis_pedido_payment_date">
+        <?php _e('Fecha de confirmación del Pago:', 'almedis'); ?>
+    </label>
+    <?php $value = get_post_meta($post->ID, 'almedis_pedido_payment_date', true); ?>
+    <input id="almedis_pedido_payment_date" name="almedis_pedido_payment_date" type="date" class="form-control" value="<?php echo $value; ?>" />
+</div>
+<div class="almedis-custom-metabox-item">
+    <label for="almedis_pedido_observaciones">
+        <?php _e('Observaciones:', 'almedis'); ?>
+    </label>
+    <?php $value = get_post_meta($post->ID, 'almedis_pedido_observaciones', true); ?>
+    <textarea id="almedis_pedido_observaciones" name="almedis_pedido_observaciones" type="text" class="form-control" rows="5"><?php echo $value; ?></textarea>
+</div>
+<?php 
     }
 }
 
