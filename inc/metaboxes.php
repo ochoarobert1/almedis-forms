@@ -384,8 +384,9 @@ class AlmedisMetaboxes extends AlmedisForm
 <?php
     }
 
-    public function render_status_meta_box_content($post) {
-?>
+    public function render_status_meta_box_content($post)
+    {
+        ?>
 <div class="almedis-custom-metabox-item">
     <label for="almedis_pedido_status">
         <?php _e('Estatus:', 'almedis'); ?>
@@ -405,7 +406,8 @@ class AlmedisMetaboxes extends AlmedisForm
 <?php
     }
 
-    public function render_admin_meta_box_content($post) {
+    public function render_admin_meta_box_content($post)
+    {
         ?>
 <div class="almedis-custom-metabox-item">
     <label for="almedis_pedido_payment_nro">
@@ -428,7 +430,7 @@ class AlmedisMetaboxes extends AlmedisForm
     <?php $value = get_post_meta($post->ID, 'almedis_pedido_observaciones', true); ?>
     <textarea id="almedis_pedido_observaciones" name="almedis_pedido_observaciones" type="text" class="form-control" rows="5"><?php echo $value; ?></textarea>
 </div>
-<?php 
+<?php
     }
 }
 
