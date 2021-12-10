@@ -57,7 +57,7 @@ function almedis_cpt_pedidos()
         'supports'              => array( 'title' ),
         'taxonomies'            => array( 'status' ),
         'hierarchical'          => false,
-        'public'                => true,
+        'public'                => false,
         'show_ui'               => true,
         'show_in_menu'          => false,
         'menu_position'         => 5,
@@ -67,7 +67,7 @@ function almedis_cpt_pedidos()
         'can_export'            => true,
         'has_archive'           => false,
         'exclude_from_search'   => true,
-        'publicly_queryable'    => true,
+        'publicly_queryable'    => false,
         'capability_type'       => 'page',
         'show_in_rest'          => true,
     );
@@ -118,7 +118,7 @@ function almedis_cpt_instituciones()
         'supports'              => array( 'title' ),
         'taxonomies'            => array( 'status' ),
         'hierarchical'          => false,
-        'public'                => true,
+        'public'                => false,
         'show_ui'               => true,
         'show_in_menu'          => false,
         'menu_position'         => 5,
@@ -128,7 +128,7 @@ function almedis_cpt_instituciones()
         'can_export'            => true,
         'has_archive'           => false,
         'exclude_from_search'   => true,
-        'publicly_queryable'    => true,
+        'publicly_queryable'    => false,
         'capability_type'       => 'page',
         'show_in_rest'          => true,
     );
@@ -187,3 +187,50 @@ function almedis_populate_columns($column, $post_id)
     }
 }
 add_action('manage_pedidos_posts_custom_column', 'almedis_populate_columns', 10, 2);
+
+function almedis_filter_instituciones_columns($columns)
+{
+    unset($columns['date']);
+    $columns['almedis_institucion_logo'] = __('Logo', 'almedis');
+    $columns['almedis_institucion_rut'] = __('RUT', 'almedis');
+    $columns['almedis_institucion_email'] = __('Correo Electrónico', 'almedis');
+    $columns['almedis_institucion_phone'] = __('Teléfono', 'almedis');
+    $columns['almedis_institucion_encargado'] = __('Encargado', 'almedis');
+    $columns['date'] = __('Date', 'wordpress');
+    return $columns;
+}
+
+add_filter('manage_instituciones_posts_columns', 'almedis_filter_instituciones_columns');
+
+
+function almedis_instituciones_populate_columns($column, $post_id)
+{
+    // Image column
+    if ('almedis_institucion_logo' === $column) {
+        $value = get_post_meta($post_id, 'almedis_institucion_logo', true);
+        ob_start(); ?>
+
+        <?php $image = ($value == '') ? 'http://placehold.it/100x100' : $value; ?>
+        <img id="almedis_institucion_logo_img" src="<?php echo $image ?>" alt="Logo" class="avatar avatar-img" />
+<?php
+        $content = ob_get_clean();
+        echo $content;
+    }
+
+    if ('almedis_institucion_rut' === $column) {
+        echo get_post_meta($post_id, 'almedis_institucion_rut', true);
+    }
+
+    if ('almedis_institucion_email' === $column) {
+        echo get_post_meta($post_id, 'almedis_institucion_email', true);
+    }
+
+    if ('almedis_institucion_phone' === $column) {
+        echo get_post_meta($post_id, 'almedis_institucion_phone', true);
+    }
+
+    if ('almedis_institucion_encargado' === $column) {
+        echo get_post_meta($post_id, 'almedis_institucion_encargado', true);
+    }
+}
+add_action('manage_instituciones_posts_custom_column', 'almedis_instituciones_populate_columns', 10, 2);

@@ -79,6 +79,22 @@ class almedisActivation
                     'delete_published_pages' => false
                 )
             );
+            add_role(
+                'almedis_admin',
+                __('Admin Institución', 'almedis'),
+                array(
+                    'read'  => false,
+                    'delete_posts'  => false,
+                    'delete_published_posts' => false,
+                    'edit_posts'   => false,
+                    'publish_posts' => false,
+                    'upload_files'  => false,
+                    'edit_pages'  => false,
+                    'edit_published_pages'  =>  false,
+                    'publish_pages'  => false,
+                    'delete_published_pages' => false
+                )
+            );
             update_option('almedis_client_roles', 1);
         }
 
@@ -134,6 +150,7 @@ class AlmedisForm
      */
     public function almedis_admin_scripts()
     {
+        global $typenow;
         wp_enqueue_style(
             'almedis-admin',
             plugins_url('css/admin-almedis.css', __FILE__),
@@ -141,6 +158,26 @@ class AlmedisForm
             self::VERSION,
             'all'
         );
+
+        wp_enqueue_script(
+            'almedis-admin',
+            plugins_url('js/admin-almedis.js', __FILE__),
+            ['jquery'],
+            self::VERSION,
+            true
+        );
+        
+        if ($typenow == 'instituciones') {
+            wp_enqueue_media();
+            wp_localize_script(
+                'almedis-admin',
+                'meta_image',
+                array(
+                    'title' => __('Choose or Upload Media', 'events'),
+                    'button' => __('Use this media', 'events'),
+                )
+            );
+        }
     }
     
     /**

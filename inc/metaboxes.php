@@ -23,13 +23,13 @@ class AlmedisMetaboxes extends AlmedisForm
     public function __construct()
     {
         add_action('load-post.php', array($this, 'almedis_remove_post_type_edit_screen'), 10);
-        add_action('admin_head-edit.php', array($this, 'almedis_quick_edit_remover' ));
         add_action('add_meta_boxes', array( $this, 'add_meta_box' ));
         add_action('save_post', array( $this, 'save'));
         add_filter('postbox_classes_pedidos_almedis_metabox', array($this, 'add_pedido_metabox_classes'));
         add_filter('postbox_classes_pedidos_almedis_type_metabox', array($this, 'add_cliente_metabox_classes'));
         add_filter('postbox_classes_pedidos_almedis_status_metabox', array($this, 'add_pedido_metabox_classes'));
         add_filter('postbox_classes_pedidos_almedis_admin_metabox', array($this, 'add_pedido_metabox_classes'));
+        add_filter('postbox_classes_instituciones_almedis_instituciones_metabox', array($this, 'add_pedido_metabox_classes'));
     }
     
     /**
@@ -58,30 +58,6 @@ class AlmedisMetaboxes extends AlmedisForm
         return $classes;
     }
 
-    /**
-     * Method almedis_quick_edit_remover
-     *
-     * @return void
-     */
-    public function almedis_quick_edit_remover()
-    {
-        global $current_screen;
-        if ('edit-pedidos' != $current_screen->id) {
-            return;
-        } ?>
-<script type="text/javascript">
-    jQuery(document).ready(function($) {
-        $('span:contains("Title")').each(function(i) {
-            $(this).parent().remove();
-        });
-        $('span:contains("Slug")').each(function(i) {
-            $(this).parent().remove();
-        });
-    });
-</script>
-<?php
-    }
-    
     /**
      * Method almedis_remove_post_type_edit_screen
      *
@@ -141,6 +117,17 @@ class AlmedisMetaboxes extends AlmedisForm
                 'high'
             );
         }
+
+        if ($post_type == 'instituciones') {
+            add_meta_box(
+                'almedis_instituciones_metabox',
+                __('Institución: Información Adicional', 'almedis'),
+                array( $this, 'render_institucion_meta_box_content' ),
+                $post_type,
+                'advanced',
+                'high'
+            );
+        }
     }
   
     /**
@@ -187,32 +174,169 @@ class AlmedisMetaboxes extends AlmedisForm
             $historial = new AlmedisHistorial;
             $historial->create_almedis_historial($text);
         }
-
         
-
-        $mydata = sanitize_text_field($_POST['almedis_pedido_status']);
-        update_post_meta($post_id, 'almedis_pedido_status', $mydata);
+        if (isset($_POST['almedis_pedido_status'])) {
+            $mydata = sanitize_text_field($_POST['almedis_pedido_status']);
+            update_post_meta($post_id, 'almedis_pedido_status', $mydata);
+        }
   
-        $mydata = sanitize_text_field($_POST['almedis_client_name']);
-        update_post_meta($post_id, 'almedis_client_name', $mydata);
+        if (isset($_POST['almedis_client_name'])) {
+            $mydata = sanitize_text_field($_POST['almedis_client_name']);
+            update_post_meta($post_id, 'almedis_client_name', $mydata);
+        }
 
-        $mydata = sanitize_text_field($_POST['almedis_client_rut']);
-        update_post_meta($post_id, 'almedis_client_rut', $mydata);
+        if (isset($_POST['almedis_client_rut'])) {
+            $mydata = sanitize_text_field($_POST['almedis_client_rut']);
+            update_post_meta($post_id, 'almedis_client_rut', $mydata);
+        }
 
-        $mydata = sanitize_text_field($_POST['almedis_client_email']);
-        update_post_meta($post_id, 'almedis_client_email', $mydata);
+        if (isset($_POST['almedis_client_email'])) {
+            $mydata = sanitize_text_field($_POST['almedis_client_email']);
+            update_post_meta($post_id, 'almedis_client_email', $mydata);
+        }
 
-        $mydata = sanitize_text_field($_POST['almedis_client_phone']);
-        update_post_meta($post_id, 'almedis_client_phone', $mydata);
+        if (isset($_POST['almedis_client_phone'])) {
+            $mydata = sanitize_text_field($_POST['almedis_client_phone']);
+            update_post_meta($post_id, 'almedis_client_phone', $mydata);
+        }
 
-        $mydata = sanitize_text_field($_POST['almedis_client_medicine']);
-        update_post_meta($post_id, 'almedis_client_medicine', $mydata);
+        if (isset($_POST['almedis_client_medicine'])) {
+            $mydata = sanitize_text_field($_POST['almedis_client_medicine']);
+            update_post_meta($post_id, 'almedis_client_medicine', $mydata);
+        }
 
-        $mydata = sanitize_text_field($_POST['almedis_client_notification']);
-        update_post_meta($post_id, 'almedis_client_notification', $mydata);
+        if (isset($_POST['almedis_client_notification'])) {
+            $mydata = sanitize_text_field($_POST['almedis_client_notification']);
+            update_post_meta($post_id, 'almedis_client_notification', $mydata);
+        }
 
-        $mydata = sanitize_text_field($_POST['almedis_client_instituto']);
-        update_post_meta($post_id, 'almedis_client_instituto', $mydata);
+        if (isset($_POST['almedis_client_instituto'])) {
+            $mydata = sanitize_text_field($_POST['almedis_client_instituto']);
+            update_post_meta($post_id, 'almedis_client_instituto', $mydata);
+        }
+
+        if (isset($_POST['almedis_institucion_logo'])) {
+            $mydata = sanitize_text_field($_POST['almedis_institucion_logo']);
+            update_post_meta($post_id, 'almedis_institucion_logo', $mydata);
+        }
+
+        if (isset($_POST['almedis_institucion_name'])) {
+            $mydata = sanitize_text_field($_POST['almedis_institucion_name']);
+            update_post_meta($post_id, 'almedis_institucion_name', $mydata);
+        }
+
+        if (isset($_POST['almedis_institucion_rut'])) {
+            $mydata = sanitize_text_field($_POST['almedis_institucion_rut']);
+            update_post_meta($post_id, 'almedis_institucion_rut', $mydata);
+        }
+
+        if (isset($_POST['almedis_institucion_email'])) {
+            $mydata = sanitize_text_field($_POST['almedis_institucion_email']);
+            update_post_meta($post_id, 'almedis_institucion_email', $mydata);
+        }
+
+        if (isset($_POST['almedis_institucion_phone'])) {
+            $mydata = sanitize_text_field($_POST['almedis_institucion_phone']);
+            update_post_meta($post_id, 'almedis_institucion_phone', $mydata);
+        }
+
+        if (isset($_POST['almedis_institucion_encargado'])) {
+            $mydata = sanitize_text_field($_POST['almedis_institucion_encargado']);
+            update_post_meta($post_id, 'almedis_institucion_encargado', $mydata);
+        }
+
+        if (isset($_POST['almedis_institucion_user'])) {
+            $mydata = sanitize_text_field($_POST['almedis_institucion_user']);
+            update_post_meta($post_id, 'almedis_institucion_user', $mydata);
+        }
+    }
+
+    /**
+     * Render Meta Box content.
+     *
+     * @param WP_Post $post The post object.
+     */
+    public function render_institucion_meta_box_content($post)
+    {
+        ?>
+<div class="almedis-custom-metabox-wrapper">
+    <?php wp_nonce_field('almedis_forms', 'almedis_forms_nonce'); ?>
+
+    <input type="hidden" name="current_user_id" value="<?php echo get_current_user_id(); ?>">
+
+    <div class="almedis-custom-metabox-item">
+        <label for="almedis_institucion_logo">
+            <?php _e('Logo de la institución', 'almedis'); ?>
+        </label>
+        <?php $value = get_post_meta($post->ID, 'almedis_institucion_logo', true); ?>
+        <fieldset>
+            <div>
+                <?php $image = ($value == '') ? 'http://placehold.it/100x100' : $value; ?>
+                <img id="almedis_institucion_logo_img" src="<?php echo $image ?>" alt="Logo" class="avatar avatar-img" />
+                <input type="hidden" class="large-text" name="almedis_institucion_logo" id="almedis_institucion_logo" value="<?php echo esc_attr($image); ?>"><br>
+                <button type="button" class="button" id="events_video_upload_btn" data-media-uploader-target="#almedis_institucion_logo"><?php _e('Upload Media', 'myplugin')?></button>
+            </div>
+        </fieldset>
+    </div>
+
+    <div class="almedis-custom-metabox-item">
+        <label for="almedis_institucion_name">
+            <?php _e('Nombre de la institución', 'almedis'); ?>
+        </label>
+        <?php $value = get_post_meta($post->ID, 'almedis_institucion_name', true); ?>
+        <input id="almedis_institucion_name" name="almedis_institucion_name" type="text" class="form-control" value="<?php echo $value; ?>" />
+    </div>
+
+    <div class="almedis-custom-metabox-item">
+        <label for="almedis_institucion_rut">
+            <?php _e('RUT', 'almedis'); ?>
+        </label>
+        <?php $value = get_post_meta($post->ID, 'almedis_institucion_rut', true); ?>
+        <input id="almedis_institucion_rut" name="almedis_institucion_rut" type="text" class="form-control" value="<?php echo $value; ?>" />
+    </div>
+
+    <div class="almedis-custom-metabox-item">
+        <label for="almedis_institucion_email">
+            <?php _e('Correo Electrónico', 'almedis'); ?>
+        </label>
+        <?php $value = get_post_meta($post->ID, 'almedis_institucion_email', true); ?>
+        <input id="almedis_institucion_email" name="almedis_institucion_email" type="text" class="form-control" value="<?php echo $value; ?>" />
+    </div>
+
+    <div class="almedis-custom-metabox-item">
+        <label for="almedis_institucion_phone">
+            <?php _e('Teléfono / WhatsApp', 'almedis'); ?>
+        </label>
+        <?php $value = get_post_meta($post->ID, 'almedis_institucion_phone', true); ?>
+        <input id="almedis_institucion_phone" name="almedis_institucion_phone" type="text" class="form-control" value="<?php echo $value; ?>" />
+    </div>
+
+    <div class="almedis-custom-metabox-item">
+        <label for="almedis_institucion_encargado">
+            <?php _e('Nombre del encargado', 'almedis'); ?>
+        </label>
+        <?php $value = get_post_meta($post->ID, 'almedis_institucion_encargado', true); ?>
+        <input id="almedis_institucion_encargado" name="almedis_institucion_encargado" type="text" class="form-control" value="<?php echo $value; ?>" />
+    </div>
+
+    <div class="almedis-custom-metabox-item">
+        <label for="almedis_institucion_user">
+            <?php _e('Usuario administrador de esta institucion', 'almedis'); ?>
+        </label>
+        <?php $value = get_post_meta($post->ID, 'almedis_institucion_user', true); ?>
+        <div class="current-user">
+            <span class="almedis-user-icon"></span>
+            <?php $blogusers = get_users(array( 'role__in' => array( 'administrator', 'almedis_admin' ) )); ?>
+            <select name="almedis_institucion_user" id="almedis_institucion_user">
+                <option value=""><?php _e('Seleccione una opción'); ?></option>
+                <?php foreach ($blogusers as $user) { ?>
+                <option value="<?php echo esc_attr($user->ID); ?>" <?php selected($value, $user->ID); ?>><?php echo esc_html($user->display_name) . ' - ' . esc_html($user->user_email); ?></option>
+                <?php } ?>
+            </select>
+        </div>
+    </div>
+</div>
+<?php
     }
   
   
