@@ -21,12 +21,12 @@ Crea unas tablas adicionales dentro de la base de datos en WordPress, para los r
 ## Instalación
 
 Instala Almedis Forms a través del directorio de plugins, o sube manualmente los archivos a tu servidor.
-## License
+## Licencia
 
 [MIT](https://choosealicense.com/licenses/mit/)
 
 
-## Authors
+## Autores
 
 - [Robert Ochoa](https://www.robertochoaweb.com/casos/almedis-forms)
 
