@@ -314,7 +314,7 @@ class Almedis_Forms_Admin_Dashboard
                         <h4><?php _e('Pedidos', 'almedis'); ?></h4>
                         <?php $pedidos = get_posts(array('numberposts' => -1, 'post_type' => 'pedidos', 'orderby' => 'date', 'order' => 'DESC')); ?>
                         <?php if ($pedidos) : ?>
-                            <p class="big-number"><?php echo count($pedidos); ?> <span>+ 10 esta semana</span></p>
+                            <p class="big-number"><?php echo count($pedidos); ?> Pedidos</p>
                         <?php else : ?>
                             <p class="big-number">0</p>
                         <?php endif; ?>
@@ -327,18 +327,38 @@ class Almedis_Forms_Admin_Dashboard
                     </div>
                     <div class="almedis-dashboard-wrapper">
                         <h4><?php _e('Clientes', 'almedis'); ?></h4>
-                        <p class="big-number">12 <span>+ 5 esta semana</span></p>
+                        <?php $clients = 0; ?>
+                        <?php $users = get_users(); ?>
+                        <?php foreach ($users as $user) { ?>
+                            <?php $admin_user = $this->user_has_role($user->ID, 'almedis_admin'); ?>
+                            <?php $convenios_user = $this->user_has_role($user->ID, 'convenios_admin'); ?>
+                            <?php $normal_user = $this->user_has_role($user->ID, 'almedis_client'); ?>
+                            <?php $user = get_userdata($user->ID); ?>
+                            <?php if (($admin_user == true) || ($convenios_user == true) || ($normal_user == true)) { ?>
+                                <?php $clients++; ?>
+                            <?php } ?>
+                        <?php } ?>
+                        <p class="big-number"><?php echo $clients; ?> Clientes</p>
                     </div>
                 </div>
+                <?php $pedidos = get_posts(array('numberposts' => -1, 'post_type' => 'pedidos', 'orderby' => 'date', 'order' => 'DESC')); ?>
+                <?php $acumPedidos = 0; ?>
+                <?php foreach ($pedidos as $pedido) { ?>
+                    <?php $price = (int) get_post_meta($pedido->ID, 'almedis_pedido_payment_qty', true); ?>
+                    <?php $acumPedidos = $acumPedidos + $price; ?>
+                <?php } ?>
+                <?php if ($acumPedidos == '') { ?>
                 <div id="orders" class="almedis-dashboard-item">
                     <div class="almedis-dashicons-icon">
                         <span class="dashicons dashicons-admin-users"></span>
                     </div>
                     <div class="almedis-dashboard-wrapper">
                         <h4><?php _e('Ordenes de Compra', 'almedis'); ?></h4>
-                        <p class="big-number">$ 1,200.00 <span>+ $ 100 esta semana</span></p>
+
+                        <p class="big-number">$ <?php number_format($acumPedidos, 0, ',', '.'); ?></p>
                     </div>
                 </div>
+                <?php } ?>
             </div>
             <div class="almedis-dashboard-info">
                 <div class="almedis-dashboard-list-container">
