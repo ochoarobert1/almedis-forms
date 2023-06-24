@@ -57,7 +57,7 @@ if (downloadXLS) {
     });
 }
 
-$(document).ready(function() {
+jQuery(document).ready(function() {
     jQuery('.btn-custom-opener-logged').on('click', function(e) {
         e.preventDefault();
     });
