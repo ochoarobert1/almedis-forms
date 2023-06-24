@@ -11,14 +11,14 @@ require_once('vendor/autoload.php');
  * that starts the plugin.
  *
  * @link              https://indexart.cl
- * @since             1.0.0
+ * @since             1.1.0
  * @package           Almedis_Forms
  *
  * @wordpress-plugin
  * Plugin Name:       Almedis Forms
  * Plugin URI:        https://indexart.cl
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
- * Version:           1.0.0
+ * Description:       Sistema CRM para Almedis. Registro, administración y venta de productos médicos para los clientes de la empresa. Este plugin genera un menu dentro del administrador con todas las opciones necesarias.
+ * Version:           1.1.0
  * Author:            IndexArt
  * Author URI:        https://indexart.cl
  * License:           GPL-2.0+
@@ -28,11 +28,9 @@ require_once('vendor/autoload.php');
  */
 
 // If this file is called directly, abort.
-if (! defined('WPINC')) {
+if (!defined('WPINC')) {
     die;
 }
-
-
 
 /**
  * Currently plugin version.
@@ -40,7 +38,7 @@ if (! defined('WPINC')) {
  * Rename this for your plugin and update it as you release new versions.
  */
 define('ALMEDIS_FORMS_VERSION', '1.0.0');
-if (! defined('ALMEDIS_PLUGIN_BASE')) {
+if (!defined('ALMEDIS_PLUGIN_BASE')) {
     // in main plugin file
     define('ALMEDIS_PLUGIN_BASE', plugin_dir_path(__FILE__));
 }
