@@ -1,0 +1,11 @@
+{
+    "config": {
+		"platform": {
+			"php": "7.2"
+		}
+	},
+    "require": {
+        "chillerlan/php-qrcode": "^3.4",
+        "shuchkin/simplexlsxgen": "^1.1"
+    }
+}

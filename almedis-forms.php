@@ -1,262 +1,103 @@
 <?php
+
+require_once('vendor/autoload.php');
+
 /**
- * Almedis Forms
+ * The plugin bootstrap file
  *
- * @package           AlmedisForms
- * @author            IndexArt
- * @copyright         2021 IndexArt
- * @license           GPL-2.0-or-later
+ * This file is read by WordPress to generate the plugin information in the plugin
+ * admin area. This file also includes all of the dependencies used by the plugin,
+ * registers the activation and deactivation functions, and defines a function
+ * that starts the plugin.
+ *
+ * @link              https://indexart.cl
+ * @since             1.0.0
+ * @package           Almedis_Forms
  *
  * @wordpress-plugin
  * Plugin Name:       Almedis Forms
  * Plugin URI:        https://indexart.cl
- * Description:       Forms
+ * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
  * Version:           1.0.0
- * Requires at least: 5.2
- * Requires PHP:      7.2
  * Author:            IndexArt
- * Author URI:        https://example.com
- * Text Domain:       almedis-forms
- * License:           GPL v2 or later
+ * Author URI:        https://indexart.cl
+ * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Update URI:        https://example.com/my-plugin/
+ * Text Domain:       almedis-forms
+ * Domain Path:       /languages
  */
 
+// If this file is called directly, abort.
+if (! defined('WPINC')) {
+    die;
+}
 
-if (! defined('ABSPATH')) {
-    exit; // Exit if accessed directly
+
+
+/**
+ * Currently plugin version.
+ * Start at version 1.0.0 and use SemVer - https://semver.org
+ * Rename this for your plugin and update it as you release new versions.
+ */
+define('ALMEDIS_FORMS_VERSION', '1.0.0');
+if (! defined('ALMEDIS_PLUGIN_BASE')) {
+    // in main plugin file
+    define('ALMEDIS_PLUGIN_BASE', plugin_dir_path(__FILE__));
 }
 
 /**
- * Method almedis_activation_hook | almedis_deactivation_hook
- *
- * @return void
+ * The code that runs during plugin activation.
+ * This action is documented in includes/class-almedis-forms-activator.php
  */
-class almedisActivation
+function activate_almedis_forms()
 {
-    /**
-     * Method almedis_historial_db
-     *
-     * @return void
-     */
-    public function almedis_historial_db()
-    {
-        global $wpdb;
-        $database_version = get_option('almedis_db_version');
-        if ($database_version != '1.0.0') {
-            $table_name = $wpdb->prefix . "almedis_historial";
-            $almedis_db_version = '1.0.0';
-            $charset_collate = $wpdb->get_charset_collate();
-    
-            if ($wpdb->get_var("SHOW TABLES LIKE '{$table_name}'") != $table_name) {
-                $sql = "CREATE TABLE $table_name (
-                ID mediumint(9) NOT NULL AUTO_INCREMENT,
-                `desc` text NOT NULL,
-                `date` timestamp NOT NULL,
-                PRIMARY KEY  (ID)
-            ) $charset_collate;";
-    
-                require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-                dbDelta($sql);
-                add_option('almedis_db_version', $almedis_db_version);
-            }
-        }
-
-        if (get_option('almedis_client_roles') < 1) {
-            add_role(
-                'almedis_client',
-                __('Cliente', 'almedis'),
-                array(
-                    'read'  => false,
-                    'delete_posts'  => false,
-                    'delete_published_posts' => false,
-                    'edit_posts'   => false,
-                    'publish_posts' => false,
-                    'upload_files'  => false,
-                    'edit_pages'  => false,
-                    'edit_published_pages'  =>  false,
-                    'publish_pages'  => false,
-                    'delete_published_pages' => false
-                )
-            );
-            add_role(
-                'almedis_admin',
-                __('Admin Institución', 'almedis'),
-                array(
-                    'read'  => false,
-                    'delete_posts'  => false,
-                    'delete_published_posts' => false,
-                    'edit_posts'   => false,
-                    'publish_posts' => false,
-                    'upload_files'  => false,
-                    'edit_pages'  => false,
-                    'edit_published_pages'  =>  false,
-                    'publish_pages'  => false,
-                    'delete_published_pages' => false
-                )
-            );
-            update_option('almedis_client_roles', 1);
-        }
-
-        flush_rewrite_rules();
-    }
+    require_once plugin_dir_path(__FILE__) . 'includes/class-almedis-forms-activator.php';
+    Almedis_Forms_Activator::activate();
 }
 
 /**
- * Method almedis_activate
- *
- * @return void
+ * The code that runs during plugin deactivation.
+ * This action is documented in includes/class-almedis-forms-deactivator.php
  */
-
-register_activation_hook(__FILE__, array( 'almedisActivation', 'almedis_historial_db' ));
-/**
- * AlmedisForm Class Controller
- */
-class AlmedisForm
+function deactivate_almedis_forms()
 {
-    const VERSION = '1.0.0';
-
-    /**
-     * Method __construct
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        add_filter('admin_footer_text', array($this, 'almedis_remove_admin_footer_text' ), 11);
-        add_filter('update_footer', array($this, 'almedis_remove_admin_footer_text' ), 11);
-        add_action('admin_enqueue_scripts', array($this, 'almedis_admin_scripts'), 99);
-        add_action('wp_enqueue_scripts', array($this, 'almedis_public_scripts'), 99);
-        add_filter('admin_body_class', array($this, 'almedis_admin_body_class' ));
-    }
-
-    /**
-     * Method almedis_remove_admin_footer_text
-     *
-     * @return false
-     */
-    public function almedis_remove_admin_footer_text()
-    {
-        $screen = get_current_screen();
-        if (strpos($screen->id, 'almedis') !== false) {
-            return null;
-        }
-    }
-    
-    /**
-     * Method almedis_admin_scripts
-     *
-     * @return void
-     */
-    public function almedis_admin_scripts()
-    {
-        global $typenow;
-        wp_enqueue_style(
-            'almedis-admin',
-            plugins_url('css/admin-almedis.css', __FILE__),
-            [],
-            self::VERSION,
-            'all'
-        );
-
-        wp_enqueue_script(
-            'almedis-admin',
-            plugins_url('js/admin-almedis.js', __FILE__),
-            ['jquery'],
-            self::VERSION,
-            true
-        );
-        
-        if ($typenow == 'instituciones') {
-            wp_enqueue_media();
-            wp_localize_script(
-                'almedis-admin',
-                'meta_image',
-                array(
-                    'title' => __('Choose or Upload Media', 'events'),
-                    'button' => __('Use this media', 'events'),
-                )
-            );
-        }
-    }
-    
-    /**
-     * Method almedis_public_scripts
-     *
-     * @return void
-     */
-    public function almedis_public_scripts()
-    {
-        wp_enqueue_style(
-            'almedis-public',
-            plugins_url('css/public-almedis.css', __FILE__),
-            [],
-            self::VERSION,
-            'all'
-        );
-
-        wp_enqueue_script(
-            'almedis-public',
-            plugins_url('js/public-almedis.min.js', __FILE__),
-            [],
-            self::VERSION,
-            true
-        );
-
-        wp_register_script(
-            'almedis-forms',
-            plugins_url('js/public-almedis-forms.min.js', __FILE__),
-            ['almedis-public'],
-            self::VERSION,
-            true
-        );
-
-        wp_register_script(
-            'almedis-login',
-            plugins_url('js/public-almedis-login.js', __FILE__),
-            ['almedis-public'],
-            self::VERSION,
-            true
-        );
-
-        wp_localize_script(
-            'almedis-public',
-            'custom_admin_url',
-            array(
-                'ajax_url' => admin_url('admin-ajax.php')
-            )
-        );
-    }
-
-    
-    /**
-     * Method almedis_admin_body_class
-     *
-     * @param $classes $classes [explicite description]
-     *
-     * @return void
-     */
-    public function almedis_admin_body_class($classes)
-    {
-        $screen = get_current_screen();
-        if (strpos($screen->id, 'almedis') !== false) {
-            $classes .= ' almedis-forms';
-        }
-        return $classes;
-    }
+    require_once plugin_dir_path(__FILE__) . 'includes/class-almedis-forms-deactivator.php';
+    Almedis_Forms_Deactivator::deactivate();
 }
 
+register_activation_hook(__FILE__, 'activate_almedis_forms');
+register_deactivation_hook(__FILE__, 'deactivate_almedis_forms');
+
 /**
- * Add dashboard container
+ * The core plugin class that is used to define internationalization,
+ * admin-specific hooks, and public-facing site hooks.
  */
-require_once('inc/post_types.php');
-require_once('inc/dashboard.php');
-require_once('inc/metaboxes.php');
-require_once('inc/historial.php');
-require_once('inc/shortcodes/submission-form.php');
-require_once('inc/shortcodes/account-dashboard.php');
-require_once('inc/notifications.php');
-require_once('inc/ajax_functions.php');
+require plugin_dir_path(__FILE__) . 'includes/class-almedis-forms.php';
 
+/**
+ * Plugin class core file for AJAX Responses on Admin
+ * admin-specific hooks only.
+ */
+require plugin_dir_path(__FILE__) . 'includes/class-almedis-forms-ajax-admin.php';
 
-new AlmedisForm;
+/**
+ * Plugin class core file for AJAX Responses on Public
+ * public-specific hooks only.
+ */
+require plugin_dir_path(__FILE__) . 'includes/class-almedis-forms-ajax-public.php';
+
+/**
+ * Begins execution of the plugin.
+ *
+ * Since everything within the plugin is registered via hooks,
+ * then kicking off the plugin from this point in the file does
+ * not affect the page life cycle.
+ *
+ * @since    1.0.0
+ */
+function run_almedis_forms()
+{
+    $plugin = new Almedis_Forms();
+    $plugin->run();
+}
+run_almedis_forms();
