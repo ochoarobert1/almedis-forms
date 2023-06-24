@@ -1,14 +1,14 @@
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
     'use strict';
 
-    jQuery('#logo_upload_btn').click(function(e) {
+    jQuery('#logo_upload_btn').click(function (e) {
         e.preventDefault();
         var image = wp.media({
-                title: 'Upload Image',
-                // mutiple: true if you want to upload multiple files at once
-                multiple: false
-            }).open()
-            .on('select', function(e) {
+            title: 'Upload Image',
+            // mutiple: true if you want to upload multiple files at once
+            multiple: false
+        }).open()
+            .on('select', function (e) {
                 // This will return the selected image from the Media Uploader, the result is an object
                 var uploaded_image = image.state().get('selection').first();
                 // We convert uploaded_image to a JSON object to make accessing it easier
@@ -22,6 +22,7 @@ jQuery(document).ready(function() {
     });
 
     jQuery('#usersTable').DataTable({
+        "pageLength": 50,
         "language": {
             "sProcessing": "Procesando...",
             "sLengthMenu": "Mostrar _MENU_ registros",

@@ -61,7 +61,7 @@ class Almedis_Forms_Admin
     public function enqueue_styles()
     {
         // Additional Styles
-        wp_enqueue_style('datatables', 'https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css', array(), $this->version, 'all');
+        wp_enqueue_style('datatables', 'https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css', array(), $this->version, 'all');
         wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/almedis-forms-admin.css', array(), $this->version, 'all');
     }
 
@@ -76,7 +76,7 @@ class Almedis_Forms_Admin
     {
         global $typenow;
         // Additional JS
-        wp_enqueue_script('datatables', 'https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js', array( 'jquery' ), $this->version, true);
+        wp_enqueue_script('datatables', 'https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js', array( 'jquery' ), $this->version, true);
         wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/almedis-forms-admin.js', array( 'jquery', 'datatables' ), $this->version, false);
         
         if ($typenow == 'instituciones') {
