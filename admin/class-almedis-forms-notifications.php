@@ -445,7 +445,7 @@ class Almedis_Forms_Notificactions
 
         $to = $email;
         $emailsCC = '';
-        $emailsBCC = 'indexart.cl@gmail.com';
+        $emailsBCC = '';
                 
         $headers[] = 'Content-Type: text/html; charset=UTF-8';
         $headers[] = 'From: ' . esc_html(get_bloginfo('name')) . ' <noreply@' . strtolower($_SERVER['SERVER_NAME']) . '>';
