@@ -206,6 +206,7 @@ class Almedis_Forms
 
         $this->loader->add_action('admin_menu', $plugin_admin_dashboard, 'almedis_admin_menu');
         $this->loader->add_action('admin_menu', $plugin_admin_dashboard, 'almedis_admin_menu');
+        $this->loader->add_action('admin_init', $plugin_admin_dashboard, 'register_almedis_settings');
 
         $this->loader->add_filter('admin_body_class', $plugin_admin_dashboard, 'almedis_admin_body_class');
         $this->loader->add_filter('admin_footer_text', $plugin_admin_dashboard, 'almedis_remove_admin_footer_text', 11);
@@ -240,6 +241,9 @@ class Almedis_Forms
 
         $this->loader->add_action('personal_options_update', $plugin_admin, 'almedis_save_profile_fields');
         $this->loader->add_action('edit_user_profile_update', $plugin_admin, 'almedis_save_profile_fields');
+
+        
+
     }
 
     /**
@@ -277,7 +281,9 @@ class Almedis_Forms
         $this->loader->add_action('wp_ajax_almedis_new_pass_user', $plugin_ajax_public, 'almedis_new_pass_user_callback');
         $this->loader->add_action('wp_ajax_nopriv_almedis_new_pass_user', $plugin_ajax_public, 'almedis_new_pass_user_callback');
         
-
+        // VALIDATE RECATPCHA 
+        $this->loader->add_action('wp_ajax_nopriv_validate_recaptcha_token', $plugin_ajax_public, 'validate_recaptcha_token_callback');
+        $this->loader->add_action('wp_ajax_validate_recaptcha_token', $plugin_ajax_public, 'validate_recaptcha_token_callback');
 
         // NATURAL FORMS
         $this->loader->add_action('wp_ajax_almedis_register_natural', $plugin_ajax_public, 'almedis_register_natural_callback');

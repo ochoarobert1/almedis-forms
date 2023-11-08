@@ -96,6 +96,22 @@ class Almedis_Forms_Ajax_Public
             );
         }
     }
+
+    public function validate_recaptcha_token_callback() {
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_reporting(E_ALL);
+            ini_set('display_errors', 1);
+        }
+
+        $response = array();
+        $data =  isset($_POST) ? $_POST : array();
+        $secret   = get_option('google_secret');
+        $response = file_get_contents(
+            "https://www.google.com/recaptcha/api/siteverify?secret=" . $secret . "&response=" . $data['token'] . "&remoteip=" . $_SERVER['REMOTE_ADDR']
+        );
+        $response = json_decode($response);
+        wp_send_json_success($response, 200);
+    }
    
     /**
      * Method function_get_client_user_id
@@ -885,15 +901,8 @@ class Almedis_Forms_Ajax_Public
 
         // Process sent data from AJAX
         $posted_data =  isset($_POST) ? $_POST : array();
-        $file_data = isset($_FILES) ? $_FILES : array();
         $data = array_merge($posted_data, $file_data);
         $response = array();
-
-        // Upload the picture for testimonial custom post type
-        $uploadedfile = $data['test_picture'];
-        $upload_overrides = array( 'test_form' => false );
-        $test_picture = wp_handle_upload($uploadedfile, $upload_overrides);
-        $filename = $test_picture['url'];
 
         // Build testimonial custom post type array data
         $testimonial_post = array(
@@ -901,34 +910,14 @@ class Almedis_Forms_Ajax_Public
             'post_content'  => $data['test_message'],
             'post_type'     => 'testimonios',
             'post_status'   => 'draft',
-            'post_author'   => 1
+            'post_author'   => 1,
+            'meta_input'   => array(
+                'almedis_testimonial_inst' => $data['test_institucion'],
+            ),
         );
 
-        // Insert the post into the database
         $parent_post_id = wp_insert_post($testimonial_post);
         
-        // Get the path to the upload directory.
-        $wp_upload_dir = wp_upload_dir();
-        
-        // Prepare an array of post data for the attachment.
-        $attachment = array(
-            'guid'           => $wp_upload_dir['url'] . '/' . basename($filename),
-            'post_title'     => preg_replace('/\.[^.]+$/', '', basename($filename)),
-            'post_content'   => '',
-            'post_status'    => 'inherit'
-        );
-        
-        // Insert the attachment.
-        $attach_id = wp_insert_attachment($attachment, $filename, $parent_post_id);
-        
-        // Make sure that this file is included, as wp_generate_attachment_metadata() depends on it.
-        require_once(ABSPATH . 'wp-admin/includes/image.php');
-        
-        // Generate the metadata for the attachment, and update the database record.
-        $attach_data = wp_generate_attachment_metadata($attach_id, $filename);
-        wp_update_attachment_metadata($attach_id, $attach_data);
-        set_post_thumbnail($parent_post_id, $attach_id);
-
         // Create new historial data
         $text = 'Sistema: Se ha registrado un nuevo testimonio';
         $historial = new Almedis_Forms_Historial($this->plugin_name, $this->version);

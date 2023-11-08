@@ -284,6 +284,17 @@ class Almedis_Forms_Admin_Dashboard
         echo $this->almedis_get_footer();
     }
 
+        
+    /**
+     * Method register_almedis_settings
+     *
+     * @return void
+     */
+    public function register_almedis_settings() {
+        register_setting( 'almedis-settings-group', 'google_key' );
+        register_setting( 'almedis-settings-group', 'google_secret' );
+    }
+
     /**
      * Method almedis_opciones
      *
@@ -292,7 +303,26 @@ class Almedis_Forms_Admin_Dashboard
     public function almedis_opciones()
     {
         echo $this->almedis_get_header();
-
+        ?>
+        <div class="wrap almedis-wrap-options">
+            <form method="post" action="options.php">
+                <?php settings_fields( 'almedis-settings-group' ); ?>
+                <?php do_settings_sections( 'almedis-settings-group' ); ?>
+                <table class="form-table">
+                    <tr valign="top">
+                    <th scope="row"><?php _e('Google Key', 'almedis'); ?></th>
+                    <td><input type="password" name="google_key" value="<?php echo esc_attr( get_option('google_key') ); ?>" size="80" /></td>
+                    </tr>
+                    
+                    <tr valign="top">
+                    <th scope="row"><?php _e('Google Secret', 'almedis'); ?></th>
+                    <td><input type="password" name="google_secret" value="<?php echo esc_attr( get_option('google_secret') ); ?>" size="80" /></td>
+                    </tr>
+                </table>
+                <?php submit_button(); ?>
+            </form>
+        </div>
+    <?php
         echo $this->almedis_get_footer();
     }
 

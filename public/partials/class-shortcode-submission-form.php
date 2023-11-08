@@ -177,6 +177,7 @@ class Almedis_Forms_Public_Submission_Form
                     </div>
                     <small class="form-helper danger hidden"><?php _e('Error: Debe seleccionar una de las opciones', 'almedis'); ?></small>
                 </div>
+                <input type="hidden" id="naturalRecaptcha" value="" />
                 <div class="form-group submit-group">
                     <button id="naturalSubmit" class="btn btn-md btn-cotizar"><?php _e('Cotizar', 'almedis'); ?></button>
                     <div id="naturalResult"></div>
@@ -265,6 +266,7 @@ class Almedis_Forms_Public_Submission_Form
                     </div>
                     <small class="form-helper danger hidden"><?php _e('Error: Debe seleccionar una de las opciones', 'almedis'); ?></small>
                 </div>
+                <input type="hidden" id="convenioRecaptcha" value="" />
                 <div class="form-group submit-group">
                     <button id="convenioSubmit" class="btn btn-md btn-cotizar"><?php _e('Cotizar', 'almedis'); ?></button>
                     <div id="convenioResult"></div>

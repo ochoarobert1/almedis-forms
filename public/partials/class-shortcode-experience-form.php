@@ -83,17 +83,14 @@ class Almedis_Forms_Public_Testimonial_Form
             <small class="form-helper danger hidden"><?php _e('Error: El nombre debe ser válido', 'almedis'); ?></small>
         </div>
         <div class="form-group">
+            <label for="test_institucion"><?php _e('Institución', 'almedis'); ?></label>
+            <input id="test_institucion" name="test_institucion" class="form-control almedis-form-control" type="text" autocomplete="business" />
+            <small class="form-helper danger hidden"><?php _e('Error: La institución debe ser válida', 'almedis'); ?></small>
+        </div>
+        <div class="form-group">
             <label for="test_message"><?php _e('Testimonio', 'almedis'); ?></label>
             <textarea id="test_message" name="test_message" class="form-control almedis-form-control"></textarea>
             <small class="form-helper danger hidden"><?php _e('Error: El testimonio no puede estar vacio', 'almedis'); ?></small>
-        </div>
-        <div class="form-group">
-            <label for="test_picture_file" class="custom-file-upload">
-                <input id="test_picture_file" name="test_picture" class="form-control" type="file" />
-                Cargar Foto de Testimonio
-            </label>
-            <small class="form-helper danger hidden"><?php _e('Error: Debe cargar una fotografía para el testimonio', 'almedis'); ?></small>
-            <div class="file-helper test-file-helper hidden"><span class="almedis-file-icon"></span> <span id="testPictureSelected"></span></div>
         </div>
         <div class="form-group submit-group">
             <button id="testSubmit" class="btn btn-md btn-cotizar"><?php _e('Enviar testimonio', 'almedis'); ?></button>
