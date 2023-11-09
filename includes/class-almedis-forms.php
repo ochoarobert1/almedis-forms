@@ -15,32 +15,8 @@
  */
 class Almedis_Forms
 {
-    /**
-     * The loader that's responsible for maintaining and registering all hooks that power
-     * the plugin.
-     *
-     * @since    1.0.0
-     * @access   protected
-     * @var      Almedis_Forms_Loader    $loader    Maintains and registers all hooks for the plugin.
-     */
     protected $loader;
-
-    /**
-     * The unique identifier of this plugin.
-     *
-     * @since    1.0.0
-     * @access   protected
-     * @var      string    $plugin_name    The string used to uniquely identify this plugin.
-     */
     protected $plugin_name;
-
-    /**
-     * The current version of the plugin.
-     *
-     * @since    1.0.0
-     * @access   protected
-     * @var      string    $version    The current version of the plugin.
-     */
     protected $version;
 
     /**
@@ -129,34 +105,22 @@ class Almedis_Forms
      */
     private function load_dependencies()
     {
-
-        /**
-         * The class responsible for orchestrating the actions and filters of the
-         * core plugin.
-         */
+        // The class responsible for orchestrating the actions and filters of the core plugin.
         require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-almedis-forms-loader.php';
         require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-almedis-forms-historial.php';
         require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-almedis-forms-notifications.php';
 
-        /**
-         * The class responsible for defining internationalization functionality
-         * of the plugin.
-         */
+        // The class responsible for defining internationalization functionality of the plugin.
         require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-almedis-forms-i18n.php';
 
-        /**
-         * The class responsible for defining all actions that occur in the admin area.
-         */
+        // The class responsible for defining all actions that occur in the admin area.
         require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-almedis-forms-admin.php';
         require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-almedis-forms-dashboard.php';
         require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-almedis-forms-pedidos-metaboxes.php';
         require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-almedis-forms-instituciones-metaboxes.php';
         require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-almedis-forms-dashboard.php';
 
-        /**
-         * The class responsible for defining all actions that occur in the public-facing
-         * side of the site.
-         */
+        // The class responsible for defining all actions that occur in the public-facing side of the site.
         require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-almedis-forms-public.php';
         require_once plugin_dir_path(dirname(__FILE__)) . 'public/partials/class-shortcode-login-buton.php';
         require_once plugin_dir_path(dirname(__FILE__)) . 'public/partials/class-shortcode-lost-password.php';
@@ -240,9 +204,6 @@ class Almedis_Forms
 
         $this->loader->add_action('personal_options_update', $plugin_admin, 'almedis_save_profile_fields');
         $this->loader->add_action('edit_user_profile_update', $plugin_admin, 'almedis_save_profile_fields');
-
-
-
     }
 
     /**
@@ -346,7 +307,5 @@ class Almedis_Forms
 
         $this->loader->add_action('wp_ajax_nopriv_almedis_reload_docs', $plugin_ajax_public, 'almedis_reload_docs_callback');
         $this->loader->add_action('wp_ajax_almedis_reload_docs', $plugin_ajax_public, 'almedis_reload_docs_callback');
-
-
     }
 }

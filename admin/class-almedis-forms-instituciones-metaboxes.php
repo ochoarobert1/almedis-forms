@@ -15,23 +15,7 @@ use chillerlan\QRCode\QROptions;
  */
 class Almedis_Forms_Instituciones_Metaboxes
 {
-
-    /**
-     * The ID of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $plugin_name    The ID of this plugin.
-     */
     private $plugin_name;
-
-    /**
-     * The version of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $version    The current version of this plugin.
-     */
     private $version;
 
     /**
@@ -51,15 +35,14 @@ class Almedis_Forms_Instituciones_Metaboxes
      * Method instituciones_add_meta_box
      * Adds the meta box container.
      *
-     * @param   $post_type $post_type [explicite description]
+     * @param   $post_type $post_type [object]
      * @since   1.0.0
      * @return  void
      */
     public function instituciones_add_meta_box($post_type)
     {
-        // Limit meta box to certain post types.
         $post_types = array('instituciones');
-  
+
         if (in_array($post_type, $post_types)) {
             add_meta_box(
                 'almedis_instituciones_metabox',
@@ -79,7 +62,7 @@ class Almedis_Forms_Instituciones_Metaboxes
             );
         }
     }
-  
+
     /**
      * Method instituciones_save_postmeta
      * Save the meta when the post is saved.
@@ -94,25 +77,23 @@ class Almedis_Forms_Instituciones_Metaboxes
             return $post_id;
         }
 
-        if (! isset($_POST['almedis_forms_nonce'])) {
+        if (!isset($_POST['almedis_forms_nonce'])) {
             return $post_id;
         }
 
         $nonce = $_POST['almedis_forms_nonce'];
-  
-        // Check the user's permissions.
+
         if ('page' == $_POST['post_type']) {
-            if (! current_user_can('edit_page', $post_id)) {
+            if (!current_user_can('edit_page', $post_id)) {
                 return $post_id;
             }
         } else {
-            if (! current_user_can('edit_post', $post_id)) {
+            if (!current_user_can('edit_post', $post_id)) {
                 return $post_id;
             }
         }
 
-        // Verify that the nonce is valid.
-        if (! wp_verify_nonce($nonce, 'almedis_forms')) {
+        if (!wp_verify_nonce($nonce, 'almedis_forms')) {
             return $post_id;
         } else {
             $current_user_id = $_POST['current_user_id'];
@@ -121,7 +102,7 @@ class Almedis_Forms_Instituciones_Metaboxes
 
             $text = 'Actualización: El usuario ' . $user_info->user_login . ' ha editado el ' . $post->post_title;
             $historial = new Almedis_Forms_Historial($this->plugin_name, $this->version);
-            
+
             $historial->create_almedis_historial($text);
         }
 
@@ -158,7 +139,6 @@ class Almedis_Forms_Instituciones_Metaboxes
         if (isset($_POST['almedis_institucion_user'])) {
             $user_id = sanitize_text_field($_POST['almedis_institucion_user']);
             update_post_meta($post_id, 'almedis_institucion_user', $user_id);
-            // Update user with instituto.
             update_user_meta($user_id, 'almedis_client_instituto', $post_id);
         }
     }
@@ -188,7 +168,7 @@ class Almedis_Forms_Instituciones_Metaboxes
                 <?php $image = ($value == '') ? 'http://placehold.it/100x100' : $value; ?>
                 <img id="almedis_institucion_logo_img" src="<?php echo $image ?>" alt="Logo" class="avatar avatar-img" />
                 <input type="hidden" class="large-text" name="almedis_institucion_logo" id="almedis_institucion_logo" value="<?php echo esc_attr($image); ?>"><br>
-                <button type="button" class="button" id="logo_upload_btn" data-media-uploader-target="#almedis_institucion_logo"><?php _e('Upload Media', 'myplugin')?></button>
+                <button type="button" class="button" id="logo_upload_btn" data-media-uploader-target="#almedis_institucion_logo"><?php _e('Cargar Logo', 'almedis')?></button>
             </div>
         </fieldset>
     </div>

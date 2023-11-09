@@ -1,6 +1,6 @@
 <?php
 /**
- * The Notifications by Email
+ * Notifications by Email Class
  *
  * @package    Almedis_Forms
  * @subpackage Almedis_Forms/admin
@@ -8,22 +8,7 @@
  */
 class Almedis_Forms_Notificactions
 {
-    /**
-     * The ID of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $plugin_name    The ID of this plugin.
-     */
     private $plugin_name;
-
-    /**
-     * The version of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $version    The current version of this plugin.
-     */
     private $version;
 
     /**
@@ -257,11 +242,7 @@ class Almedis_Forms_Notificactions
 <br>
 <?php
         $content_admin = ob_get_clean();
-
-        $admin_email = 'ventas@almedis.cl';
-        //$admin_email = get_option('admin_email');
-
-
+        $admin_email = get_option('almedis_admin_email');
         $this->almedis_send_notification($title, $title_long, $content_admin, $admin_email);
     }
 
@@ -297,9 +278,8 @@ class Almedis_Forms_Notificactions
 <br>
 <br>
 <?php
-                $content = ob_get_clean();
-        $admin_email = 'ventas@almedis.cl';
-        //$admin_email = get_option('admin_email');
+        $content = ob_get_clean();
+        $admin_email = get_option('almedis_admin_email');
         $this->almedis_send_notification($title, $title_long, $content, $admin_email);
     }
 
@@ -316,9 +296,6 @@ class Almedis_Forms_Notificactions
         $codigo = get_post_meta($data['pedidoID'], 'almedis_unique_id', true);
         $nombre = get_post_meta($data['pedidoID'], 'almedis_client_name', true);
         $email = get_post_meta($data['pedidoID'], 'almedis_client_email', true);
-
-        
-        
         $title = 'Nuevo estatus del Pedido # ' . $codigo;
         $title_long = 'Su pedido nro: ' . $codigo . 'tiene un nuevo estatus';
 
@@ -412,7 +389,6 @@ class Almedis_Forms_Notificactions
         $this->almedis_send_notification($title, $title_long, $content, $email);
     }
 
-    
     /**
      * Method almedis_send_notification
      *
@@ -445,7 +421,7 @@ class Almedis_Forms_Notificactions
 
         $to = $email;
         $emailsCC = '';
-        $emailsBCC = 'indexart.cl@gmail.com';
+        $emailsBCC = '';
                 
         $headers[] = 'Content-Type: text/html; charset=UTF-8';
         $headers[] = 'From: ' . esc_html(get_bloginfo('name')) . ' <noreply@' . strtolower($_SERVER['SERVER_NAME']) . '>';

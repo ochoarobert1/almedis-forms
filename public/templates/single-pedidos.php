@@ -1,10 +1,23 @@
+<?php
+/**
+ * Single Pedidos Template File
+ *
+ * This file is used to markup the public-facing aspects of this custom post type.
+ *
+ * @link       https://indexart.cl
+ * @since      1.0.0
+ *
+ * @package    Almedis_Forms
+ * @subpackage Almedis_Forms/public/templates
+ */
+?>
 <?php get_header(); ?>
 <?php the_post(); ?>
 <div class="main-pedidos-container">
-    <?php 
+    <?php
     $pedido_id = get_the_ID();
-    $status = get_post_meta($pedido_id, 'almedis_pedido_status', true);
-    ?>
+$status = get_post_meta($pedido_id, 'almedis_pedido_status', true);
+?>
     <h2><a href="<?php echo home_url('/mi-cuenta');?>"><i class="fa fa-chevron-left"></i></a> Ver Pedido # <?php echo $pedido_id; ?></h2>
 
     <form enctype="multipart/form-data" id="almedisModalForm" class="main-almedis-modal-container" data-pedido="<?php echo $pedido_id; ?>">
@@ -85,18 +98,18 @@
         <div class="form-group tracking-modal submit-group">
             <h3>Seguimiento</h3>
             <?php
-            if (($status == 'Cotizacion Recibida') || ($status == 'Pendiente de Pago') || ($status == 'Pago Confirmado')) {
-                $value = 25;
-            }
-        if ($status == 'En Tránsito') {
-            $value = 66;
+        if (($status == 'Cotizacion Recibida') || ($status == 'Pendiente de Pago') || ($status == 'Pago Confirmado')) {
+            $value = 25;
         }
-        if ($status == 'Completada') {
-            $value = 100;
-        }
-        if ($status == 'Cancelada') {
-            $value = 0;
-        } ?>
+    if ($status == 'En Tránsito') {
+        $value = 66;
+    }
+    if ($status == 'Completada') {
+        $value = 100;
+    }
+    if ($status == 'Cancelada') {
+        $value = 0;
+    } ?>
             <div class="pedido-tracking-line-container">
                 <div class="pedido-tracking-line ">
                     <?php $class = ($value < 1) ? 'cancel' : 'success'; ?>

@@ -1,3 +1,16 @@
+<?php
+/**
+ * Single Instituciones Template File
+ *
+ * This file is used to markup the public-facing aspects of this custom post type.
+ *
+ * @link       https://indexart.cl
+ * @since      1.0.0
+ *
+ * @package    Almedis_Forms
+ * @subpackage Almedis_Forms/public/templates
+ */
+?>
 <?php echo get_header(); ?>
 <?php the_post(); ?>
 <?php if (!is_user_logged_in()) { ?>
@@ -74,8 +87,8 @@
     </aside>
 </main>
 <?php
-        } else {
-            $user = wp_get_current_user(); ?>
+} else {
+    $user = wp_get_current_user(); ?>
 <section id="almedisUserDashboard" class="almedis-user-dashboard almedis-institucion-dashboard">
     <aside class="almedis-user-dashboard-menu">
         <ul>
@@ -233,7 +246,7 @@
     </div>
 </section>
 <?php
-        }?>
+}?>
 <div id="modal" class="modal modal-hidden">
     <div class="modal-container">
         <div id="closeModal" class="close-modal"></div>

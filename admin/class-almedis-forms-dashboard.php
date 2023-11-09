@@ -1,15 +1,4 @@
 <?php
-
-/**
- * The admin-specific functionality of the plugin.
- *
- * @link       https://indexart.cl
- * @since      1.0.0
- *
- * @package    Almedis_Forms
- * @subpackage Almedis_Forms/admin
- */
-
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -22,23 +11,7 @@
  */
 class Almedis_Forms_Admin_Dashboard
 {
-
-    /**
-     * The ID of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $plugin_name    The ID of this plugin.
-     */
     private $plugin_name;
-
-    /**
-     * The version of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $version    The current version of this plugin.
-     */
     private $version;
 
     /**
@@ -84,12 +57,11 @@ class Almedis_Forms_Admin_Dashboard
         }
     }
 
-
     /**
      * Method user_has_role
      *
-     * @param $user_id $user_id [explicite description]
-     * @param $role_name $role_name [explicite description]
+     * @param $user_id $user_id [int]
+     * @param $role_name $role_name [object]
      *
      * @return void
      */
@@ -105,10 +77,8 @@ class Almedis_Forms_Admin_Dashboard
      *
      * @since    1.0.0
      */
-
     public function almedis_admin_menu()
     {
-        // Add menu admin
         add_menu_page(
             __('Escritorio', 'almedis-forms'),
             'Almedis',
@@ -196,6 +166,13 @@ class Almedis_Forms_Admin_Dashboard
         return $content_footer;
     }
 
+    /**
+     * Method get_almedis_role_name
+     *
+     * @param $user_ID $user_ID [int]
+     *
+     * @return void
+     */
     public function get_almedis_role_name($user_ID)
     {
         global $wp_roles;
@@ -219,11 +196,11 @@ class Almedis_Forms_Admin_Dashboard
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Nombre y Apellido</th>
-                        <th>RUT</th>
-                        <th>Correo Electrónico</th>
-                        <th>Teléfono/WhatsApp</th>
-                        <th>Tipo de Perfil</th>
+                        <th><?php _e('Nombre y Apellido', 'almedis'); ?></th>
+                        <th><?php _e('RUT', 'almedis'); ?></th>
+                        <th><?php _e('Correo Electrónico', 'almedis'); ?></th>
+                        <th><?php _e('Teléfono/WhatsApp', 'almedis'); ?></th>
+                        <th><?php _e('Tipo de Perfil', 'almedis'); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -284,15 +261,16 @@ class Almedis_Forms_Admin_Dashboard
         echo $this->almedis_get_footer();
     }
 
-        
     /**
      * Method register_almedis_settings
      *
      * @return void
      */
-    public function register_almedis_settings() {
-        register_setting( 'almedis-settings-group', 'google_key' );
-        register_setting( 'almedis-settings-group', 'google_secret' );
+    public function register_almedis_settings()
+    {
+        register_setting('almedis-settings-group', 'almedis_admin_email');
+        register_setting('almedis-settings-group', 'google_key');
+        register_setting('almedis-settings-group', 'google_secret');
     }
 
     /**
@@ -306,17 +284,20 @@ class Almedis_Forms_Admin_Dashboard
         ?>
         <div class="wrap almedis-wrap-options">
             <form method="post" action="options.php">
-                <?php settings_fields( 'almedis-settings-group' ); ?>
-                <?php do_settings_sections( 'almedis-settings-group' ); ?>
+                <?php settings_fields('almedis-settings-group'); ?>
+                <?php do_settings_sections('almedis-settings-group'); ?>
                 <table class="form-table">
                     <tr valign="top">
-                    <th scope="row"><?php _e('Google Key', 'almedis'); ?></th>
-                    <td><input type="password" name="google_key" value="<?php echo esc_attr( get_option('google_key') ); ?>" size="80" /></td>
+                        <th scope="row"><?php _e('Correo donde deben recibirse las notificaciones', 'almedis'); ?></th>
+                        <td><input type="text" name="almedis_admin_email" value="<?php echo esc_attr(get_option('almedis_admin_email')); ?>" size="80" /></td>
                     </tr>
-                    
                     <tr valign="top">
-                    <th scope="row"><?php _e('Google Secret', 'almedis'); ?></th>
-                    <td><input type="password" name="google_secret" value="<?php echo esc_attr( get_option('google_secret') ); ?>" size="80" /></td>
+                        <th scope="row"><?php _e('Google Key', 'almedis'); ?></th>
+                        <td><input type="password" name="google_key" value="<?php echo esc_attr(get_option('google_key')); ?>" size="80" /></td>
+                    </tr>
+                    <tr valign="top">
+                        <th scope="row"><?php _e('Google Secret', 'almedis'); ?></th>
+                        <td><input type="password" name="google_secret" value="<?php echo esc_attr(get_option('google_secret')); ?>" size="80" /></td>
                     </tr>
                 </table>
                 <?php submit_button(); ?>
@@ -344,11 +325,10 @@ class Almedis_Forms_Admin_Dashboard
                         <h4><?php _e('Pedidos', 'almedis'); ?></h4>
                         <?php $pedidos = get_posts(array('numberposts' => -1, 'post_type' => 'pedidos', 'orderby' => 'date', 'order' => 'DESC')); ?>
                         <?php if ($pedidos) : ?>
-                            <p class="big-number"><?php echo count($pedidos); ?> Pedidos</p>
+                            <p class="big-number"><?php echo count($pedidos); ?> <?php _e('Pedidos', 'almedis'); ?></p>
                         <?php else : ?>
                             <p class="big-number">0</p>
                         <?php endif; ?>
-
                     </div>
                 </div>
                 <div id="clients" class="almedis-dashboard-item">
@@ -368,7 +348,7 @@ class Almedis_Forms_Admin_Dashboard
                                 <?php $clients++; ?>
                             <?php } ?>
                         <?php } ?>
-                        <p class="big-number"><?php echo $clients; ?> Clientes</p>
+                        <p class="big-number"><?php echo $clients; ?> <?php _e('Clientes', 'almedis'); ?></p>
                     </div>
                 </div>
                 <?php $pedidos = get_posts(array('numberposts' => -1, 'post_type' => 'pedidos', 'orderby' => 'date', 'order' => 'DESC')); ?>
