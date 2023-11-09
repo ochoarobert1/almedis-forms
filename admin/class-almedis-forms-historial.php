@@ -1,15 +1,4 @@
 <?php
-
-/**
- * The admin-specific functionality of the plugin.
- *
- * @link       https://indexart.cl
- * @since      1.0.0
- *
- * @package    Almedis_Forms
- * @subpackage Almedis_Forms/admin
- */
-
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -22,23 +11,7 @@
  */
 class Almedis_Forms_Historial
 {
-
-    /**
-     * The ID of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $plugin_name    The ID of this plugin.
-     */
     private $plugin_name;
-
-    /**
-     * The version of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $version    The current version of this plugin.
-     */
     private $version;
 
     /**
@@ -54,13 +27,13 @@ class Almedis_Forms_Historial
         $this->version = $version;
     }
 
-     /**
-     * Method create_almedis_historial
-     *
-     * @param $data $data [explicite description]
-     *
-     * @return void
-     */
+    /**
+    * Method create_almedis_historial
+    *
+    * @param $data $data [string]
+    *
+    * @return void
+    */
     public function create_almedis_historial($data)
     {
         global $wpdb;
@@ -76,7 +49,7 @@ class Almedis_Forms_Historial
             )
         );
     }
-    
+
     /**
      * Method select_almedis_historial
      *
@@ -96,7 +69,7 @@ class Almedis_Forms_Historial
 
         return $historial;
     }
-    
+
     /**
      * Method get_almedis_historial_type
      *
@@ -112,6 +85,4 @@ class Almedis_Forms_Historial
 
         return $text_array;
     }
-
-    
 }

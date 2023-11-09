@@ -1,5 +1,4 @@
 <?php
-
 /**
 * Almedis Dashboard - Footer Container
 *
@@ -12,7 +11,6 @@
 if (! defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
-
 ?>
 <div class="almedis-forms-footer">
     <div class="almedis-form-item">

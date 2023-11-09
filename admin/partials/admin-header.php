@@ -1,5 +1,4 @@
 <?php
-
 /**
 * Almedis Dashboard - Header Content
 *
@@ -9,10 +8,9 @@
 *
 */
 
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
-
 ?>
 <div class="almedis-forms-header">
     <h1><?php echo get_admin_page_title(); ?></h1>

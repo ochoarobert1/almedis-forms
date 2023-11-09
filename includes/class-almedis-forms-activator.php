@@ -1,16 +1,6 @@
 <?php
 
 /**
- * Fired during plugin activation
- *
- * @link       https://indexart.cl
- * @since      1.0.0
- *
- * @package    Almedis_Forms
- * @subpackage Almedis_Forms/includes
- */
-
-/**
  * Fired during plugin activation.
  *
  * This class defines all code necessary to run during the plugin's activation.
@@ -22,13 +12,10 @@
  */
 class Almedis_Forms_Activator
 {
-
     /**
-     * Short Description. (use period)
+     * Method activate
      *
-     * Long Description.
-     *
-     * @since    1.0.0
+     * @return void
      */
     public static function activate()
     {
@@ -45,7 +32,6 @@ class Almedis_Forms_Activator
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql);
 
-        /* ADDING SPECIAL ROLES */
         add_role(
             'almedis_client',
             __('Cliente', 'almedis'),

@@ -15,33 +15,8 @@
  */
 class Almedis_Forms
 {
-
-    /**
-     * The loader that's responsible for maintaining and registering all hooks that power
-     * the plugin.
-     *
-     * @since    1.0.0
-     * @access   protected
-     * @var      Almedis_Forms_Loader    $loader    Maintains and registers all hooks for the plugin.
-     */
     protected $loader;
-
-    /**
-     * The unique identifier of this plugin.
-     *
-     * @since    1.0.0
-     * @access   protected
-     * @var      string    $plugin_name    The string used to uniquely identify this plugin.
-     */
     protected $plugin_name;
-
-    /**
-     * The current version of the plugin.
-     *
-     * @since    1.0.0
-     * @access   protected
-     * @var      string    $version    The current version of the plugin.
-     */
     protected $version;
 
     /**
@@ -130,34 +105,22 @@ class Almedis_Forms
      */
     private function load_dependencies()
     {
-
-        /**
-         * The class responsible for orchestrating the actions and filters of the
-         * core plugin.
-         */
+        // The class responsible for orchestrating the actions and filters of the core plugin.
         require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-almedis-forms-loader.php';
         require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-almedis-forms-historial.php';
         require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-almedis-forms-notifications.php';
 
-        /**
-         * The class responsible for defining internationalization functionality
-         * of the plugin.
-         */
+        // The class responsible for defining internationalization functionality of the plugin.
         require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-almedis-forms-i18n.php';
 
-        /**
-         * The class responsible for defining all actions that occur in the admin area.
-         */
+        // The class responsible for defining all actions that occur in the admin area.
         require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-almedis-forms-admin.php';
         require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-almedis-forms-dashboard.php';
         require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-almedis-forms-pedidos-metaboxes.php';
         require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-almedis-forms-instituciones-metaboxes.php';
         require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-almedis-forms-dashboard.php';
 
-        /**
-         * The class responsible for defining all actions that occur in the public-facing
-         * side of the site.
-         */
+        // The class responsible for defining all actions that occur in the public-facing side of the site.
         require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-almedis-forms-public.php';
         require_once plugin_dir_path(dirname(__FILE__)) . 'public/partials/class-shortcode-login-buton.php';
         require_once plugin_dir_path(dirname(__FILE__)) . 'public/partials/class-shortcode-lost-password.php';
@@ -202,10 +165,11 @@ class Almedis_Forms
         $plugin_admin_dashboard = new Almedis_Forms_Admin_Dashboard($this->get_plugin_name(), $this->get_version());
 
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
-        $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
+        $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts', 99);
 
         $this->loader->add_action('admin_menu', $plugin_admin_dashboard, 'almedis_admin_menu');
         $this->loader->add_action('admin_menu', $plugin_admin_dashboard, 'almedis_admin_menu');
+        $this->loader->add_action('admin_init', $plugin_admin_dashboard, 'register_almedis_settings');
 
         $this->loader->add_filter('admin_body_class', $plugin_admin_dashboard, 'almedis_admin_body_class');
         $this->loader->add_filter('admin_footer_text', $plugin_admin_dashboard, 'almedis_remove_admin_footer_text', 11);
@@ -263,9 +227,11 @@ class Almedis_Forms
         $plugin_testimonial_shortcode = new Almedis_Forms_Public_Testimonial_Form($this->get_plugin_name(), $this->get_version());
 
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
-        $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
+        $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts', 99);
+        $this->loader->add_action('wp_print_scripts', $plugin_public, 'project_dequeue_recaptcha');
 
         $this->loader->add_filter('template_include', $plugin_public, 'almedis_force_template');
+        $this->loader->add_filter('wp_footer', $plugin_public, 'almedis_show_recaptcha');
 
         $this->loader->add_action('init', $plugin_submission_shortcode, 'almedis_add_custom_shortcode');
 
@@ -276,8 +242,10 @@ class Almedis_Forms
         $this->loader->add_action('wp_ajax_nopriv_almedis_lost_pass_user', $plugin_ajax_public, 'almedis_lost_pass_user_callback');
         $this->loader->add_action('wp_ajax_almedis_new_pass_user', $plugin_ajax_public, 'almedis_new_pass_user_callback');
         $this->loader->add_action('wp_ajax_nopriv_almedis_new_pass_user', $plugin_ajax_public, 'almedis_new_pass_user_callback');
-        
 
+        // VALIDATE RECATPCHA
+        $this->loader->add_action('wp_ajax_nopriv_validate_recaptcha_token', $plugin_ajax_public, 'validate_recaptcha_token_callback');
+        $this->loader->add_action('wp_ajax_validate_recaptcha_token', $plugin_ajax_public, 'validate_recaptcha_token_callback');
 
         // NATURAL FORMS
         $this->loader->add_action('wp_ajax_almedis_register_natural', $plugin_ajax_public, 'almedis_register_natural_callback');
@@ -321,7 +289,7 @@ class Almedis_Forms
         $this->loader->add_action('init', $plugin_myaccount_shortcode, 'almedis_account_custom_shortcode');
         $this->loader->add_action('wp_ajax_nopriv_almedis_edit_pedido', $plugin_ajax_public, 'almedis_edit_pedido_callback');
         $this->loader->add_action('wp_ajax_almedis_edit_pedido', $plugin_ajax_public, 'almedis_edit_pedido_callback');
-        
+
         $this->loader->add_action('wp_ajax_nopriv_almedis_update_user', $plugin_ajax_public, 'almedis_update_user_callback');
         $this->loader->add_action('wp_ajax_almedis_update_user', $plugin_ajax_public, 'almedis_update_user_callback');
 
@@ -339,7 +307,5 @@ class Almedis_Forms
 
         $this->loader->add_action('wp_ajax_nopriv_almedis_reload_docs', $plugin_ajax_public, 'almedis_reload_docs_callback');
         $this->loader->add_action('wp_ajax_almedis_reload_docs', $plugin_ajax_public, 'almedis_reload_docs_callback');
-
-        
     }
 }

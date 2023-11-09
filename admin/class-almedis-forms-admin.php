@@ -13,25 +13,10 @@ use chillerlan\QRCode\QROptions;
  * @subpackage Almedis_Forms/admin
  * @author     IndexArt <indexart@gmail.com>
  */
+
 class Almedis_Forms_Admin
 {
-
-    /**
-     * The ID of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $plugin_name    The ID of this plugin.
-     */
     private $plugin_name;
-
-    /**
-     * The version of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $version    The current version of this plugin.
-     */
     private $version;
 
     /**
@@ -60,7 +45,6 @@ class Almedis_Forms_Admin
      */
     public function enqueue_styles()
     {
-        // Additional Styles
         wp_enqueue_style('datatables', 'https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css', array(), $this->version, 'all');
         wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/almedis-forms-admin.css', array(), $this->version, 'all');
     }
@@ -75,10 +59,9 @@ class Almedis_Forms_Admin
     public function enqueue_scripts()
     {
         global $typenow;
-        // Additional JS
         wp_enqueue_script('datatables', 'https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js', array( 'jquery' ), $this->version, true);
         wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/almedis-forms-admin.js', array( 'jquery', 'datatables' ), $this->version, false);
-        
+
         if ($typenow == 'instituciones') {
             wp_enqueue_media();
             wp_localize_script(
@@ -158,8 +141,6 @@ class Almedis_Forms_Admin
         register_post_type('pedidos', $args);
     }
 
-
-
     /**
      * Method custom_pedidos_template_file
      *
@@ -167,16 +148,17 @@ class Almedis_Forms_Admin
      *
      * @return void
      */
-    public function custom_pedidos_template_file( $template ) {
+    public function custom_pedidos_template_file($template)
+    {
         global $post;
-    
-        if ( 'pedidos' === $post->post_type && locate_template( array( 'single-pedidos.php' ) ) !== $template ) {
-            return ALMEDIS_PLUGIN_BASE .'/public/templates/single-pedidos.php';
+
+        if ('pedidos' === $post->post_type && locate_template(array( 'single-pedidos.php' )) !== $template) {
+            return ALMEDIS_PLUGIN_BASE . '/public/templates/single-pedidos.php';
         }
-    
+
         return $template;
     }
-    
+
     /**
      * Method almedis_filter_pedidos_columns
      * Add Filter to custom post columns
@@ -207,7 +189,6 @@ class Almedis_Forms_Admin
      */
     public function almedis_populate_columns($column, $post_id)
     {
-        // Image column
         if ('almedis_unique_id' === $column) {
             echo '<code>' . get_post_meta($post_id, 'almedis_unique_id', true) . '</code>';
         }
@@ -234,7 +215,7 @@ class Almedis_Forms_Admin
                 case 'institucion':
                     $class = 'client-type-institucion';
                     break;
-                
+
                 default:
                     $class = '';
                     break;
@@ -333,7 +314,6 @@ class Almedis_Forms_Admin
         return $columns;
     }
 
-
     /**
      * Method almedis_instituciones_populate_columns
      * Add content to custom post columns
@@ -383,7 +363,7 @@ class Almedis_Forms_Admin
         array_push($classes, 'almedis-pedido-metabox');
         return $classes;
     }
-    
+
     /**
      * Method add_cliente_metabox_classes
      *
@@ -405,12 +385,12 @@ class Almedis_Forms_Admin
     public function almedis_remove_post_type_edit_screen()
     {
         global $typenow;
-    
+
         if ($typenow && $typenow === 'pedidos') {
             remove_post_type_support('pedidos', 'title');
         }
     }
-    
+
     /**
      * Method almedis_additional_profile_fields
      *
@@ -447,7 +427,7 @@ class Almedis_Forms_Admin
      */
     public function almedis_save_profile_fields($user_id)
     {
-        if (! current_user_can('edit_user', $user_id)) {
+        if (!current_user_can('edit_user', $user_id)) {
             return false;
         }
 

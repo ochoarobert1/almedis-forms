@@ -70,14 +70,33 @@ class Almedis_Forms_Public
      */
     public function enqueue_scripts()
     {
+        $sitekey = get_option('google_key');
+
         // Public Class JS
         wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/almedis-forms-public-class.js', array( 'jquery' ), $this->version, true);
         // Additional JS
         wp_enqueue_script('datatables', 'https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js', array( 'jquery' ), $this->version, true);
         wp_enqueue_script('sweetalert', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', array( 'jquery' ), $this->version, true);
+        wp_enqueue_script('almedis-recaptcha', 'https://www.google.com/recaptcha/api.js?render=' . esc_attr($sitekey), array( 'jquery' ), null, ['strategy' => 'async', 'in_footer' => false]);
         // Main Functions JS
-        wp_enqueue_script($this->plugin_name . '-public', plugin_dir_url(__FILE__) . 'js/almedis-forms-public.js', array( 'jquery', 'datatables', 'sweetalert', $this->plugin_name ), $this->version, true);
-        wp_localize_script($this->plugin_name . '-public', 'custom_admin_url', array('ajax_url' => admin_url('admin-ajax.php'),'micuenta_url' => home_url('/mi-cuenta')));
+        wp_enqueue_script($this->plugin_name . '-public', plugin_dir_url(__FILE__) . 'js/almedis-forms-public.js', array( 'jquery', 'datatables', 'sweetalert', 'almedis-recaptcha', $this->plugin_name ), $this->version, true);
+        wp_localize_script(
+            $this->plugin_name . '-public',
+            'custom_admin_url',
+            array(
+                'ajax_url' => admin_url('admin-ajax.php'),
+                'micuenta_url' => home_url('/mi-cuenta'),
+                'google_key' => get_option('google_key')
+            )
+        );
+    }
+
+    public function project_dequeue_recaptcha()
+    {
+        wp_dequeue_script('recaptcha-v3');
+        wp_deregister_script('recaptcha-v3');
+        wp_dequeue_script('et-core-api-spam-recaptcha');
+        wp_deregister_script('et-core-api-spam-recaptcha');
     }
 
     /**
@@ -92,14 +111,22 @@ class Almedis_Forms_Public
     {
         // Check if archive template is called
         if (is_archive('instituciones')) {
-            $template = WP_PLUGIN_DIR .'/'. plugin_basename(dirname(__FILE__)) .'/templates/archive-instituciones.php';
+            $template = WP_PLUGIN_DIR . '/' . plugin_basename(dirname(__FILE__)) . '/templates/archive-instituciones.php';
         }
 
         // Check if archive singular is called
         if (is_singular('instituciones')) {
-            $template = WP_PLUGIN_DIR .'/'. plugin_basename(dirname(__FILE__)) .'/templates/single-instituciones.php';
+            $template = WP_PLUGIN_DIR . '/' . plugin_basename(dirname(__FILE__)) . '/templates/single-instituciones.php';
         }
 
         return $template;
+    }
+
+    public function almedis_show_recaptcha()
+    {
+        $google_key = get_option('google_key');
+        ?>
+        <div id="recaptcha" class="g-recaptcha" data-size='compact' data-theme='dark' data-sitekey="<?php echo $google_key; ?>" style="display:none;"></div>
+        <?php
     }
 }

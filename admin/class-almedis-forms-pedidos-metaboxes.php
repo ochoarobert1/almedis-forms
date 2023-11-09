@@ -11,22 +11,7 @@
  */
 class Almedis_Forms_Pedidos_Metaboxes
 {
-    /**
-     * The ID of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $plugin_name    The ID of this plugin.
-     */
     private $plugin_name;
-
-    /**
-     * The version of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $version    The current version of this plugin.
-     */
     private $version;
 
     /**
@@ -52,11 +37,9 @@ class Almedis_Forms_Pedidos_Metaboxes
      */
     public function pedidos_add_meta_box($post_type)
     {
-        // Limit meta box to certain post types.
         $post_types = array('pedidos');
-  
+
         if (in_array($post_type, $post_types)) {
-            // Main Pedidos Info
             add_meta_box(
                 'almedis_metabox',
                 __('Información del Pedido', 'almedis'),
@@ -66,7 +49,6 @@ class Almedis_Forms_Pedidos_Metaboxes
                 'high'
             );
 
-            // Clientes Info
             add_meta_box(
                 'almedis_type_metabox',
                 __('Cliente del Pedido', 'almedis'),
@@ -76,7 +58,6 @@ class Almedis_Forms_Pedidos_Metaboxes
                 'high'
             );
 
-            // Status Info
             add_meta_box(
                 'almedis_status_metabox',
                 __('Estatus del Pedido', 'almedis'),
@@ -86,7 +67,6 @@ class Almedis_Forms_Pedidos_Metaboxes
                 'high'
             );
 
-            // Payment Info
             add_meta_box(
                 'almedis_admin_metabox',
                 __('Administración y Pagos del Pedido', 'almedis'),
@@ -230,7 +210,6 @@ class Almedis_Forms_Pedidos_Metaboxes
 
     <div class="almedis-custom-metabox-documents">
         <h3><?php _e('Documentos Requeridos', 'almedis'); ?></h3>
-
         <div class="almedis-custom-metabox-document-wrapper">
             <?php $value = get_post_meta($post->ID, 'almedis_client_recipe', true); ?>
             <button class="almedis-document-icon"></button>
@@ -269,6 +248,13 @@ class Almedis_Forms_Pedidos_Metaboxes
 <?php
     }
 
+    /**
+     * Method render_type_meta_box_content
+     *
+     * @param $post $post [object]
+     *
+     * @return void
+     */
     public function render_type_meta_box_content($post)
     {
         ?>
@@ -321,6 +307,13 @@ class Almedis_Forms_Pedidos_Metaboxes
 <?php
     }
 
+    /**
+     * Method render_status_meta_box_content
+     *
+     * @param $post $post [object]
+     *
+     * @return void
+     */
     public function render_status_meta_box_content($post)
     {
         ?>
@@ -338,6 +331,13 @@ class Almedis_Forms_Pedidos_Metaboxes
 <?php
     }
 
+    /**
+     * Method render_admin_meta_box_content
+     *
+     * @param $post $post [object]
+     *
+     * @return void
+     */
     public function render_admin_meta_box_content($post)
     {
         ?>
@@ -468,25 +468,23 @@ class Almedis_Forms_Pedidos_Metaboxes
             return $post_id;
         }
 
-        if (! isset($_POST['almedis_forms_nonce'])) {
+        if (!isset($_POST['almedis_forms_nonce'])) {
             return $post_id;
         }
 
         $nonce = $_POST['almedis_forms_nonce'];
-  
-        // Check the user's permissions.
+
         if ('page' == $_POST['post_type']) {
-            if (! current_user_can('edit_page', $post_id)) {
+            if (!current_user_can('edit_page', $post_id)) {
                 return $post_id;
             }
         } else {
-            if (! current_user_can('edit_post', $post_id)) {
+            if (!current_user_can('edit_post', $post_id)) {
                 return $post_id;
             }
         }
 
-        // Verify that the nonce is valid.
-        if (! wp_verify_nonce($nonce, 'almedis_forms')) {
+        if (!wp_verify_nonce($nonce, 'almedis_forms')) {
             return $post_id;
         } else {
             $current_user_id = $_POST['current_user_id'];
@@ -495,7 +493,7 @@ class Almedis_Forms_Pedidos_Metaboxes
 
             $text = 'Actualización: El usuario ' . $user_info->user_login . ' ha editado el ' . $post->post_title;
             $historial = new Almedis_Forms_Historial($this->plugin_name, $this->version);
-            
+
             $historial->create_almedis_historial($text);
         }
 
@@ -507,7 +505,7 @@ class Almedis_Forms_Pedidos_Metaboxes
         if ($unique_id == '') {
             update_post_meta($post_id, 'almedis_unique_id', uniqid());
         }
-          
+
         if (isset($_POST['almedis_client_name'])) {
             $mydata = sanitize_text_field($_POST['almedis_client_name']);
             update_post_meta($post_id, 'almedis_client_name', $mydata);
@@ -560,11 +558,11 @@ class Almedis_Forms_Pedidos_Metaboxes
             $mydata = sanitize_text_field($_POST['almedis_pedido_status']);
             update_post_meta($post_id, 'almedis_pedido_status', $mydata);
 
-            // Email Notification
             $dataNotificacion = array(
                 'pedidoID' => $post_id,
                 'estatus' => $_POST['almedis_pedido_status']
             );
+
             $notification = new Almedis_Forms_Notificactions($this->plugin_name, $this->version);
             $notification->almedis_change_status($dataNotificacion);
         }
@@ -576,7 +574,6 @@ class Almedis_Forms_Pedidos_Metaboxes
             update_post_meta($post_id, 'almedis_pedido_payment_qty', $mydata);
         }
 
-        // Pago con Tarjeta
         if (isset($_POST['almedis_pedido_tarjeta_confirmacion'])) {
             $mydata = sanitize_text_field($_POST['almedis_pedido_tarjeta_confirmacion']);
             update_post_meta($post_id, 'almedis_pedido_tarjeta_confirmacion', $mydata);
@@ -594,7 +591,6 @@ class Almedis_Forms_Pedidos_Metaboxes
             update_post_meta($post_id, 'almedis_pedido_tarjeta_file', $mydata);
         }
 
-        // Pago con Bono
         if (isset($_POST['almedis_pedido_bono_confirmacion'])) {
             $mydata = sanitize_text_field($_POST['almedis_pedido_bono_confirmacion']);
             update_post_meta($post_id, 'almedis_pedido_bono_confirmacion', $mydata);
@@ -612,7 +608,6 @@ class Almedis_Forms_Pedidos_Metaboxes
             update_post_meta($post_id, 'almedis_pedido_bono_file', $mydata);
         }
 
-        // Pago con Transferencia
         if (isset($_POST['almedis_pedido_transferencia_confirmacion'])) {
             $mydata = sanitize_text_field($_POST['almedis_pedido_transferencia_confirmacion']);
             update_post_meta($post_id, 'almedis_pedido_transferencia_confirmacion', $mydata);

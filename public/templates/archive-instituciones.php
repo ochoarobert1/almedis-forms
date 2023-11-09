@@ -1,3 +1,16 @@
+<?php
+/**
+ * Archive Instituciones Template File
+ *
+ * This file is used to markup the public-facing aspects of this custom post type.
+ *
+ * @link       https://indexart.cl
+ * @since      1.0.0
+ *
+ * @package    Almedis_Forms
+ * @subpackage Almedis_Forms/public/templates
+ */
+?>
 <?php echo get_header(); ?>
 <?php if (!is_user_logged_in()) { ?>
 <form id="almedisLoginForm" class="almedis-login-form">
@@ -34,20 +47,20 @@
     </div>
 </form>
 <?php
-        } else {
-            $user = wp_get_current_user();
-            if (in_array('almedis_admin', (array) $user->roles)) {
-                $instituto = get_user_meta($user->ID, 'almedis_client_instituto', true);
-                if ($instituto != '') {
-                    $instituto_url = get_permalink($instituto); ?>
+} else {
+    $user = wp_get_current_user();
+    if (in_array('almedis_admin', (array) $user->roles)) {
+        $instituto = get_user_meta($user->ID, 'almedis_client_instituto', true);
+        if ($instituto != '') {
+            $instituto_url = get_permalink($instituto); ?>
                     <script type="text/javascript">
                         var redirectURL = '<?php echo $instituto_url; ?>';
                         window.location.replace(redirectURL);
                     </script>
                     <?php
-                }
-            }
-        }?>
+        }
+    }
+}?>
         <div id="modal" class="modal modal-hidden">
         <div class="modal-container">
             <div id="closeModal" class="close-modal"></div>
