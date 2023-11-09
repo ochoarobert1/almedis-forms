@@ -34,9 +34,7 @@ let passd = true,
 // Class functions declaration
 let almedisForms = new AlmedisPublicClass();
 
-function customLoadScripts() {
-  almedisForms.getRecaptchaToken();
-}
+function customLoadScripts() {}
 
 document.addEventListener("DOMContentLoaded", customLoadScripts, false);
 
@@ -178,7 +176,6 @@ if (tabsBtns.length > 0) {
 if (naturalSubmit) {
   naturalSubmit.addEventListener("click", function (e) {
     e.preventDefault();
-    almedisForms.getRecaptchaToken();
     var elem = "";
     passd = true;
 
@@ -214,40 +211,42 @@ if (naturalSubmit) {
     passd = almedisForms.validateInput(elem, "radio");
 
     if (passd == true) {
-      token = document.getElementById("naturalRecaptcha").value;
-      var newRequest = new XMLHttpRequest();
-      var formData = new FormData();
-      formData.append("action", "validate_recaptcha_token");
-      formData.append("token", token);
-
-      newRequest.open("POST", custom_admin_url.ajax_url, true);
-      newRequest.onload = function () {
-        var gresponse = JSON.parse(newRequest.responseText);
-        console.log(gresponse);
-      };
-      newRequest.send(formData);
-
-      if (gresponse.data.success == true) {
-        var newRequest = new XMLHttpRequest();
-        var resultDiv = document.getElementById("naturalResult");
-        resultDiv.innerHTML = '<div class="loader"></div>';
-        var formData = new FormData(
-          document.getElementById("almedisNaturalForm")
-        );
-        formData.append("action", "almedis_register_natural");
-
-        newRequest.open("POST", custom_admin_url.ajax_url, true);
-        newRequest.onload = function () {
-          var result = JSON.parse(newRequest.responseText);
-          resultDiv.innerHTML =
-            '<span class="response-text">' + result.data + "</span>";
-        };
-        newRequest.send(formData);
-      } else {
-        document.getElementById("almedisNaturalForm").scrollIntoView({
-          behavior: "smooth",
+      grecaptcha
+        .execute(custom_admin_url.google_key, { action: "submit" })
+        .then(function (token) {
+          var formData = new FormData();
+          formData.append("token", token);
+          formData.append("action", "validate_recaptcha_token");
+          almedisForms.ajaxRequest(
+            formData,
+            custom_admin_url.ajax_url,
+            null,
+            function (err, response) {
+              if (response.data.success === true && response.data.score > 0.7) {
+                var resultDiv = document.getElementById("naturalResult");
+                var formNatural = new FormData(
+                  document.getElementById("almedisNaturalForm")
+                );
+                formNatural.append("action", "almedis_register_natural");
+                almedisForms.ajaxRequest(
+                  formNatural,
+                  custom_admin_url.ajax_url,
+                  null,
+                  function (err, response) {
+                    resultDiv.innerHTML =
+                      '<span class="response-text">' +
+                      response.data +
+                      "</span>";
+                  }
+                );
+              }
+            }
+          );
         });
-      }
+    } else {
+      document.getElementById("almedisNaturalForm").scrollIntoView({
+        behavior: "smooth",
+      });
     }
   });
 }
@@ -307,41 +306,42 @@ if (convenioSubmit) {
     passd = almedisForms.validateInput(elem, "radio");
 
     if (passd == true) {
-      token = document.getElementById("naturalRecaptcha").value;
-      var newRequest = new XMLHttpRequest();
-      var formData = new FormData();
-      formData.append("action", "validate_recaptcha_token");
-      formData.append("token", token);
-
-      newRequest.open("POST", custom_admin_url.ajax_url, true);
-      newRequest.onload = function () {
-        var gresponse = JSON.parse(newRequest.responseText);
-        console.log(gresponse);
-      };
-      newRequest.send(formData);
-
-      if (gresponse.data.success == true) {
-        var newRequest = new XMLHttpRequest();
-        var resultDiv = document.getElementById("convenioResult");
-        resultDiv.innerHTML = '<div class="loader"></div>';
-        var formData = new FormData(
-          document.getElementById("almedisConveniosForm")
-        );
-
-        formData.append("action", "almedis_register_convenio");
-
-        newRequest.open("POST", custom_admin_url.ajax_url, true);
-        newRequest.onload = function () {
-          var result = JSON.parse(newRequest.responseText);
-          resultDiv.innerHTML =
-            '<span class="response-text">' + result.data + "</span>";
-        };
-        newRequest.send(formData);
-      } else {
-        document.getElementById("almedisConveniosForm").scrollIntoView({
-          behavior: "smooth",
+      grecaptcha
+        .execute(custom_admin_url.google_key, { action: "submit" })
+        .then(function (token) {
+          var formData = new FormData();
+          formData.append("token", token);
+          formData.append("action", "validate_recaptcha_token");
+          almedisForms.ajaxRequest(
+            formData,
+            custom_admin_url.ajax_url,
+            null,
+            function (err, response) {
+              if (response.data.success === true && response.data.score > 0.7) {
+                var resultDiv = document.getElementById("convenioResult");
+                var formNatural = new FormData(
+                  document.getElementById("almedisConveniosForm")
+                );
+                formNatural.append("action", "almedis_register_convenio");
+                almedisForms.ajaxRequest(
+                  formNatural,
+                  custom_admin_url.ajax_url,
+                  null,
+                  function (err, response) {
+                    resultDiv.innerHTML =
+                      '<span class="response-text">' +
+                      response.data +
+                      "</span>";
+                  }
+                );
+              }
+            }
+          );
         });
-      }
+    } else {
+      document.getElementById("almedisConveniosForm").scrollIntoView({
+        behavior: "smooth",
+      });
     }
   });
 }

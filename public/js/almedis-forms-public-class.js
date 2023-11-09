@@ -219,21 +219,6 @@ const spanish = {
 };
 
 class AlmedisPublicClass {
-  getRecaptchaToken() {
-    grecaptcha.ready(function () {
-      grecaptcha
-        .execute(custom_admin_url.google_key, { action: "submit" })
-        .then(function (token) {
-          if (document.getElementById("almedisNaturalForm")) {
-            document.getElementById("naturalRecaptcha").value = token;
-          }
-          if (document.getElementById("almedisConvenioForm")) {
-            document.getElementById("convenioRecaptcha").value = token;
-          }
-        });
-    });
-  }
-
   // Validate Email Address
   isValidEmailAddress(emailAddress) {
     "use strict";
@@ -383,5 +368,22 @@ class AlmedisPublicClass {
     }
 
     return passd;
+  }
+
+  ajaxRequest(formData, ajaxURl, resultDiv, done) {
+    var newRequest = new XMLHttpRequest();
+    newRequest.open("POST", ajaxURl, true);
+    if (resultDiv !== null) {
+      resultDiv.innerHTML = '<div class="loader"></div>';
+    }
+    newRequest.onload = function () {
+      var response = JSON.parse(newRequest.responseText);
+      done(null, response);
+    };
+    newRequest.onerror = function () {
+      var response = JSON.parse(newRequest.responseText);
+      done(response);
+    };
+    newRequest.send(formData);
   }
 }
