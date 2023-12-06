@@ -901,7 +901,7 @@ class Almedis_Forms_Ajax_Public
 
         // Process sent data from AJAX
         $posted_data =  isset($_POST) ? $_POST : array();
-        $data = array_merge($posted_data, $file_data);
+        $data = array_merge($posted_data);
         $response = array();
 
         // Build testimonial custom post type array data

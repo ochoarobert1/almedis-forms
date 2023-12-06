@@ -76,7 +76,7 @@ class Almedis_Forms_Public_Testimonial_Form
     {
         ob_start(); ?>
 <main class="almedis-testimonial-form-container">
-    <form enctype="multipart/form-data" id="almedisTestForm" class="almedis-form-container almedis-test-form-container">
+    <form id="almedisTestForm" class="almedis-form-container almedis-test-form-container">
         <div class="form-group">
             <label for="test_nombre"><?php _e('Nombres y Apellidos', 'almedis'); ?></label>
             <input id="test_nombre" name="test_nombre" class="form-control almedis-form-control" type="text" autocomplete="name" />
